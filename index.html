@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Akshat Saravanan | Software Engineer</title>
+  <meta name="description" content="Portfolio of Akshat Saravanan, a software engineer building AI-enabled applications on the cloud.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="progress" id="page-progress" aria-hidden="true"></div>
+  <div class="aurora" aria-hidden="true"><span></span><span></span><span></span></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="cursor-glow" id="cursor-glow" aria-hidden="true"></div>
+
+  <header class="nav" id="nav">
+    <a class="logo" href="#top" aria-label="Akshat Saravanan, back to top">AS<span>.</span></a>
+    <nav aria-label="Sections">
+      <a href="#work">Work</a>
+      <a href="#experience">Experience</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch colour theme">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    </button>
+  </header>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="container hero-inner">
+        <p class="eyebrow reveal"><span class="dot"></span> Brisbane, Australia · Open to relocation · Full work rights (Subclass 485)</p>
+        <h1 class="reveal" style="--d:80ms">
+          <span class="line">Hi, I'm <span class="grad">Akshat</span>.</span>
+          <span class="line">I build <span class="typed" id="typed" aria-live="off"></span><span class="caret" aria-hidden="true"></span></span>
+        </h1>
+        <p class="lede reveal" style="--d:160ms">Software engineer with a Master of Information Technology from The University of Queensland. I build full-stack and cloud applications, from React interfaces to Python and Node backends, and I like turning a rough idea into something people can actually use.</p>
+        <div class="cta reveal" style="--d:240ms">
+          <a class="btn primary magnetic" href="#work">See my work <span aria-hidden="true">→</span></a>
+          <a class="btn ghost magnetic" href="https://github.com/akshatmaheshwar" target="_blank" rel="noopener">GitHub</a>
+          <a class="btn ghost magnetic" href="https://www.linkedin.com/in/akshat-saravanan-2124ba215/" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+        <ul class="stats reveal" style="--d:320ms">
+          <li><strong data-count="7">0</strong><span>projects shown here</span></li>
+          <li><strong data-count="17">0</strong><span>repositories on GitHub</span></li>
+          <li><strong data-count="2">0</strong><span>cloud platforms: Azure and GCP</span></li>
+        </ul>
+      </div>
+      <a class="scroll-hint" href="#work" aria-label="Scroll to work"><span></span></a>
+    </section>
+
+    <!-- WORK -->
+    <section class="work" id="work" aria-labelledby="work-title">
+      <div class="container work-head">
+        <div class="reveal">
+          <p class="kicker">Selected work</p>
+          <h2 id="work-title">Projects you can scroll through</h2>
+          <p class="sub">Drag, swipe, use the arrow keys or the buttons. The first one is the one I'd start with.</p>
+        </div>
+        <div class="controls reveal" style="--d:100ms">
+          <span class="counter" id="counter" aria-live="polite">01 / 07</span>
+          <button class="round" id="prev" type="button" aria-label="Previous project">←</button>
+          <button class="round" id="next" type="button" aria-label="Next project">→</button>
+        </div>
+      </div>
+
+      <div class="rail" id="rail" tabindex="0" aria-label="Projects, scroll horizontally">
+        <div class="rail-pad" aria-hidden="true"></div>
+
+        <!-- 1 -->
+        <article class="card featured" data-tilt>
+          <div class="card-top">
+            <span class="badge">Featured · Azure + AI</span>
+            <span class="num">01</span>
+          </div>
+          <h3>Document Q&amp;A on Azure</h3>
+          <p class="blurb">A chat app that answers questions from a company's own documents, names the document it used, and says so when the answer isn't there.</p>
+          <figure class="shot">
+            <img src="assets/demo-chat.png" width="1917" height="943" alt="Screenshot of the chat app answering annual leave questions with the Leave Policy as the only source, and replying 'I couldn't find that in the documents.' to an out-of-scope question." loading="lazy">
+          </figure>
+          <ol class="flow" aria-label="How a question is answered">
+            <li>Question</li><li>Azure AI Search</li><li>Grounded prompt</li><li>Azure OpenAI</li><li>Cited sources</li>
+          </ol>
+          <ul class="points">
+            <li>Started from Microsoft's open-source chat template and added retrieval over six policy documents, grounding rules and citations.</li>
+            <li>No API keys anywhere. The app signs in with a managed identity, and key access on the search service is switched off.</li>
+            <li>Found and fixed a bug where the page listed every retrieved document instead of only the ones the answer cited.</li>
+            <li>Bicep for the search service and role assignments, 8 automated tests, deployed to Azure Container Apps, then torn down to stop charges.</li>
+            <li>Limits I know about: keyword search, latest message only, top 3 documents.</li>
+          </ul>
+          <div class="chips"><span>Python</span><span>Quart</span><span>Azure AI Search</span><span>Azure OpenAI</span><span>Bicep</span><span>Container Apps</span><span>Managed identity</span></div>
+          <a class="card-link" href="https://github.com/akshatmaheshwar/azure-openai-rag-chat" target="_blank" rel="noopener">View source <span aria-hidden="true">↗</span></a>
+        </article>
+
+        <!-- 2 -->
+        <article class="card" data-tilt>
+          <div class="card-top"><span class="badge">Cloud · Kubernetes</span><span class="num">02</span></div>
+          <h3>Cloud Parking</h3>
+          <p class="blurb">A smart parking platform where users find a space on a map, book it and manage their bookings. Built twice on purpose: as one server and as three services.</p>
+          <div class="diagram" aria-label="Three services: auth, booking and parking, each with its own database">
+            <div class="node">React + Leaflet</div>
+            <div class="arrow" aria-hidden="true">↓</div>
+            <div class="trio"><div class="node sm">auth</div><div class="node sm">booking</div><div class="node sm">parking</div></div>
+            <div class="note">one SQLite database per service</div>
+          </div>
+          <ul class="points">
+            <li>Monolith (Express and Sequelize) and microservices versions side by side, so the two designs can be compared.</li>
+            <li>JWT sessions, bcrypt password hashing, Dockerfile per service, Docker Compose for local runs.</li>
+            <li>Kubernetes manifests with ingress routing and a Horizontal Pod Autoscaler, deployed to Google Kubernetes Engine.</li>
+            <li>Load testing and tuning improved the booking workflow by about 40%.</li>
+          </ul>
+          <div class="chips"><span>React</span><span>Node.js</span><span>Express</span><span>Docker</span><span>Kubernetes</span><span>GKE</span><span>JWT</span></div>
+          <a class="card-link" href="https://github.com/akshatmaheshwar/cloud-parking" target="_blank" rel="noopener">View source <span aria-hidden="true">↗</span></a>
+        </article>
+
+        <!-- 3 -->
+        <article class="card" data-tilt>
+          <div class="card-top"><span class="badge">AI · Local-first</span><span class="num">03</span></div>
+          <h3>Dungeon Scribe AI</h3>
+          <p class="blurb">Listens to a tabletop D&amp;D session, writes down what was said, and lets you ask the campaign archive questions afterwards. Everything runs on your own machine.</p>
+          <div class="pipeline" aria-label="Pipeline from microphone to searchable archive">
+            <span>Mic</span><i></i><span>Whisper</span><i></i><span>Ollama LLM</span><i></i><span>Archive</span>
+          </div>
+          <ul class="points">
+            <li>Real-time transcription with Faster-Whisper and voice activity detection, then a local Gemma model picks out events such as combat, item transfers and quest updates.</li>
+            <li>Falls back to rule-based pattern matching when no model is available.</li>
+            <li>Three backups of each session: SQLite, JSON summaries and raw transcript logs.</li>
+            <li>FastAPI backend, browser front end, character sheets, inventory and journal. Team project: I built modular components and documented the architecture.</li>
+          </ul>
+          <div class="chips"><span>Python</span><span>FastAPI</span><span>Faster-Whisper</span><span>Ollama</span><span>ChromaDB</span><span>SQLite</span><span>WebSocket</span></div>
+          <a class="card-link" href="https://github.com/akshatmaheshwar/dungeon-scribe-ai" target="_blank" rel="noopener">View source <span aria-hidden="true">↗</span></a>
+        </article>
+
+        <!-- 4 -->
+        <article class="card" data-tilt>
+          <div class="card-top"><span class="badge">Languages · Testing</span><span class="num">04</span></div>
+          <h3>ToyLang and a hybrid fuzzer</h3>
+          <p class="blurb">A small programming language written from scratch, plus a bug-finder that combines random mutation with a constraint solver.</p>
+          <pre class="code" aria-label="Example program with a hidden bug"><code><span class="c"># pseudocode: why random mutation struggles</span>
+<span class="k">if</span> x == <span class="n">7331</span>:
+  y = <span class="n">100</span> / (x - <span class="n">7331</span>)   <span class="c"># divide by zero</span></code></pre>
+          <p class="code-cap">Illustration of the kind of bug it targets. Random mutation almost never guesses 7331; the solver derives it.</p>
+          <ul class="points">
+            <li>Lexer, recursive-descent parser, syntax tree and a tree-walking interpreter that records branch and statement coverage.</li>
+            <li>The random fuzzer mutates inputs and keeps only those that reach new code.</li>
+            <li>When random search stalls, Z3 symbolic execution collects the conditions along a path and solves them to produce an input that reaches the unexplored branch.</li>
+            <li>Finds division by zero and assertion failures guarded by exact-match conditions that random mutation almost never hits.</li>
+          </ul>
+          <div class="chips"><span>Python</span><span>Z3</span><span>Symbolic execution</span><span>Fuzzing</span><span>Parsing</span></div>
+          <a class="card-link" href="https://github.com/akshatmaheshwar/Toylang" target="_blank" rel="noopener">View source <span aria-hidden="true">↗</span></a>
+        </article>
+
+        <!-- 5 -->
+        <article class="card" data-tilt>
+          <div class="card-top"><span class="badge">Machine learning</span><span class="num">05</span></div>
+          <h3>Search and Reinforcement Learning</h3>
+          <p class="blurb">Three university assignments that build from path finding to planning under uncertainty to deep reinforcement learning.</p>
+          <div class="steps" aria-label="Three stages">
+            <div><b>1</b><span>A* with a custom admissible heuristic</span></div>
+            <div><b>2</b><span>Value iteration, policy iteration, Q-learning</span></div>
+            <div><b>3</b><span>Deep Q-Networks in PyTorch</span></div>
+          </div>
+          <ul class="points">
+            <li>Cheese Hunter grid world: a heuristic built from precomputed lever-to-goal distances expands far fewer nodes than uniform cost search.</li>
+            <li>Planning and learning methods converge to the same optimal policy.</li>
+            <li>DQN on CartPole and LunarLander, with experiments on learning rate, epsilon decay, target-network updates and network size. The LunarLander agent averaged about 210 reward over 100 episodes, above the 200 success threshold.</li>
+          </ul>
+          <div class="chips"><span>Python</span><span>PyTorch</span><span>Gymnasium</span><span>NumPy</span><span>A*</span><span>DQN</span></div>
+          <a class="card-link" href="https://github.com/akshatmaheshwar/comp3702-ai" target="_blank" rel="noopener">View source <span aria-hidden="true">↗</span></a>
+        </article>
+
+        <!-- 6 -->
+        <article class="card" data-tilt>
+          <div class="card-top"><span class="badge live">Full-stack · Live demo</span><span class="num">06</span></div>
+          <h3>MenuMate</h3>
+          <p class="blurb">Restaurant ordering from the table. Guests scan a QR code, order from their phone, and the kitchen sees it on a dashboard. It is deployed and you can open it.</p>
+          <ol class="flow" aria-label="Order flow">
+            <li>Scan table QR</li><li>Browse and order</li><li>Kitchen dashboard</li><li>Received → Completed</li>
+          </ol>
+          <ul class="points">
+            <li>Each table has its own link, so an order arrives already knowing the restaurant and table number. Guests do not need an account.</li>
+            <li>Staff build menus, categories and items with photos and prices, watch incoming orders, move them from Received to Processing to Completed, see which tables are occupied, and print a QR code for each table.</li>
+            <li>Django with a custom user model tied to a restaurant. Staff endpoints sit behind login, guest endpoints are public, and the data is modelled as restaurant, menu, category, item, order and order item.</li>
+            <li>Hosted on Render with a Neon Postgres database. I moved the secret key and database credentials out of the code into environment variables.</li>
+            <li>Built for a UQ web course (INFS7202).</li>
+          </ul>
+          <div class="chips"><span>Django</span><span>Python</span><span>PostgreSQL</span><span>REST endpoints</span><span>QR codes</span><span>Render</span></div>
+          <div class="card-links">
+            <a class="card-link strong" href="https://menumate-s0t5.onrender.com/tabletapapp/" target="_blank" rel="noopener">Open live demo <span aria-hidden="true">↗</span></a>
+            <a class="card-link" href="https://github.com/akshatmaheshwar/menumate" target="_blank" rel="noopener">Source <span aria-hidden="true">↗</span></a>
+          </div>
+          <p class="note-sm">Free hosting: the first visit can take a short while to wake up.</p>
+        </article>
+
+        <!-- 7 -->
+        <article class="card" data-tilt>
+          <div class="card-top"><span class="badge">Frontend · REST APIs</span><span class="num">07</span></div>
+          <h3>Laland</h3>
+          <p class="blurb">A Spotify-inspired music streaming site written in plain HTML, CSS and JavaScript, with no framework and no build step.</p>
+          <div class="grid-tags" aria-label="Pages">
+            <span>Home feed</span><span>Song page</span><span>Community</span><span>Posts</span><span>Upload music</span>
+          </div>
+          <ul class="points">
+            <li>The home feed loads songs, a top-10 chart and upcoming local concerts from REST APIs, and renders them as cards.</li>
+            <li>Song pages read and post comments. The upload form sends an artist, title, genre and file to the API as form data.</li>
+            <li>A custom play and pause control sits on top of the browser's audio element.</li>
+            <li>The community chat room is simulated with scripted messages. It is an interface exercise, not a real-time backend.</li>
+          </ul>
+          <div class="chips"><span>HTML</span><span>CSS</span><span>JavaScript</span><span>fetch API</span><span>FormData</span></div>
+          <a class="card-link" href="https://github.com/akshatmaheshwar/laland" target="_blank" rel="noopener">View source <span aria-hidden="true">↗</span></a>
+        </article>
+
+        <div class="rail-pad" aria-hidden="true"></div>
+      </div>
+
+      <div class="container">
+        <div class="rail-bar" aria-hidden="true"><span id="rail-fill"></span></div>
+      </div>
+    </section>
+
+    <!-- EXPERIENCE -->
+    <section class="experience" id="experience" aria-labelledby="exp-title">
+      <div class="container">
+        <p class="kicker reveal">Experience</p>
+        <h2 id="exp-title" class="reveal">Where I've worked and studied</h2>
+        <ol class="timeline">
+          <li class="reveal">
+            <time>May 2026 to now</time>
+            <h3>AI Trainer <span>DataAnnotation, freelance</span></h3>
+            <p>Evaluate AI-generated answers on coding and reasoning tasks against detailed rubrics, write coding prompts that stress-test frontier models, and write test cases that expose edge-case failures in open-source Python codebases.</p>
+          </li>
+          <li class="reveal">
+            <time>2024 to 2025</time>
+            <h3>Master of Information Technology <span>The University of Queensland</span></h3>
+            <p>GPA 6 out of 7. Machine learning, artificial intelligence, cloud computing and advanced software engineering.</p>
+          </li>
+          <li class="reveal">
+            <time>Oct 2023</time>
+            <h3>Software Engineer trainee <span>Zoho Corporation, Site24x7</span></h3>
+            <p>Learned Java, Cassandra and the Quartz scheduler quickly enough to deliver a working Hacker News clone with scheduled background jobs inside the programme. Received a full-time offer and declined it to study at UQ.</p>
+          </li>
+          <li class="reveal">
+            <time>Jan to Apr 2023</time>
+            <h3>Android Developer intern <span>Zoho Corporation, Zoho Books</span></h3>
+            <p>Built an Android app in Kotlin, cut local query time by 10 to 15% by optimising SQLite queries, and raised a barcode scan success rate from about 90% to over 95% after tracing the root cause. Integrated Twilio SMS notifications and answered more than 50 developer support tickets.</p>
+          </li>
+          <li class="reveal">
+            <time>2019 to 2023</time>
+            <h3>B.Tech, Electronics and Communication <span>Puducherry Technological University</span></h3>
+            <p>CGPA 8.58 out of 10.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section class="skills" id="skills" aria-labelledby="skills-title">
+      <div class="container">
+        <p class="kicker reveal">Skills</p>
+        <h2 id="skills-title" class="reveal">What I work with</h2>
+        <div class="skill-grid">
+          <div class="skill reveal"><h3>Languages</h3><p>Python, TypeScript, JavaScript, Java, Kotlin, SQL</p></div>
+          <div class="skill reveal" style="--d:60ms"><h3>Cloud</h3><p>Azure (Container Apps, AI Search, OpenAI, Key Vault, Static Web Apps), GCP (GKE, Secret Manager), Docker, Kubernetes, Bicep, GitHub Actions</p></div>
+          <div class="skill reveal" style="--d:120ms"><h3>AI</h3><p>Retrieval-augmented generation, ChromaDB, Ollama, prompt design, evaluating model output</p></div>
+          <div class="skill reveal" style="--d:180ms"><h3>Web and data</h3><p>React, Node.js, Django, REST APIs, JWT, PostgreSQL, MySQL, MongoDB</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="contact" id="contact" aria-labelledby="contact-title">
+      <div class="container contact-inner">
+        <p class="kicker reveal">Contact</p>
+        <h2 id="contact-title" class="reveal">Let's talk.</h2>
+        <p class="sub reveal">Open to software engineering, AI engineering and cloud engineering roles, and happy to relocate.</p>
+        <div class="email reveal">
+          <span id="email-text">akshatmaheshwar78@gmail.com</span>
+          <button class="btn ghost" id="copy-email" type="button">Copy</button>
+        </div>
+        <div class="cta reveal">
+          <a class="btn primary magnetic" href="https://www.linkedin.com/in/akshat-saravanan-2124ba215/" target="_blank" rel="noopener">LinkedIn</a>
+          <a class="btn ghost magnetic" href="https://github.com/akshatmaheshwar" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer"><div class="container"><span>© <span id="year"></span> Akshat Saravanan</span><a href="#top">Back to top ↑</a><button type="button" class="dnc" id="dnc">Do not click</button></div></footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
