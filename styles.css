@@ -76,7 +76,7 @@ h1, h2, h3 { font-family: var(--font-display); line-height: 1.1; letter-spacing:
 .nav { position: fixed; top: 14px; left: 50%; transform: translateX(-50%); z-index: 50; display: flex; align-items: center; gap: 28px; padding: 10px 14px 10px 22px; border-radius: 999px; background: var(--surface); border: 1px solid var(--border); backdrop-filter: blur(16px) saturate(140%); -webkit-backdrop-filter: blur(16px) saturate(140%); max-width: calc(100% - 32px); transition: box-shadow 0.3s, background 0.3s; }
 .nav.scrolled { box-shadow: var(--shadow); background: var(--surface-strong); }
 .logo { font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; text-decoration: none; }
-.logo span { color: var(--accent); }
+.logo .logo-text { color: var(--fg); }
 .nav nav { display: flex; gap: 6px; }
 .nav nav a { text-decoration: none; font-size: 0.9rem; color: var(--muted); padding: 6px 12px; border-radius: 999px; transition: color 0.2s, background 0.2s; }
 .nav nav a:hover, .nav nav a.active { color: var(--fg); background: var(--surface-strong); }
@@ -251,14 +251,13 @@ h2 { font-size: clamp(2rem, 5vw, 3.4rem); font-weight: 700; }
 
 /* ---------- Added: "Do not click" ---------- */
 .footer .container { align-items: center; }
-.dnc { font: inherit; font-family: var(--font-mono); font-size: 0.78rem; color: #fff; background: #d6293e; border: 0; padding: 7px 14px; border-radius: 6px; cursor: pointer; box-shadow: 0 4px 0 #8f1626; transition: transform 0.12s, box-shadow 0.12s, background 0.2s; position: relative; }
-.dnc:hover { background: #ea3a50; }
-.dnc:active { transform: translateY(3px); box-shadow: 0 1px 0 #8f1626; }
+.dnc { font: inherit; color: inherit; background: none; border: 0; padding: 0; margin: 0; cursor: pointer; position: relative; transition: color 0.2s; }
+.dnc:hover { color: var(--fg); }
 .dnc.dodging { transition: transform 0.25s cubic-bezier(.3,1.6,.5,1); }
 
 .term-wrap { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; padding: 16px; background: rgba(0, 0, 0, 0.72); backdrop-filter: blur(4px); animation: fadein 0.25s; }
 @keyframes fadein { from { opacity: 0; } }
-.term { width: min(640px, 100%); border-radius: 12px; overflow: hidden; background: #0b0f14; border: 1px solid #263040; box-shadow: 0 30px 80px rgba(0,0,0,.6); font-family: var(--font-mono); font-size: 0.84rem; color: #cfe3d4; }
+.term { transform-origin: 0% 100%; width: min(640px, 100%); border-radius: 12px; overflow: hidden; background: #0b0f14; border: 1px solid #263040; box-shadow: 0 30px 80px rgba(0,0,0,.6); font-family: var(--font-mono); font-size: 0.84rem; color: #cfe3d4; }
 .term-bar { display: flex; align-items: center; gap: 7px; padding: 10px 14px; background: #151c26; color: #7b8aa0; font-size: 0.75rem; }
 .term-bar i { width: 11px; height: 11px; border-radius: 50%; background: #ff5f57; }
 .term-bar i:nth-child(2) { background: #febc2e; } .term-bar i:nth-child(3) { background: #28c840; }
@@ -288,3 +287,84 @@ h2 { font-size: clamp(2rem, 5vw, 3.4rem); font-weight: 700; }
 .blackout-text { font-family: var(--font-display); font-size: clamp(2.6rem, 11vw, 7rem); font-weight: 700; color: #fff; text-align: center; opacity: 0; transform: scale(0.9); letter-spacing: -0.03em; padding: 16px; }
 .blackout-text.show { opacity: 1; transform: none; transition: opacity 0.5s, transform 0.5s cubic-bezier(.2,1.4,.4,1); }
 .blackout-sub { display: block; margin-top: 14px; font-family: var(--font-mono); font-size: clamp(0.8rem, 2.4vw, 1rem); font-weight: 400; letter-spacing: 0; color: #8a94a6; }
+
+/* Terminal waits 1.5s after the click, then slides up from the bottom-left (no flicker) */
+.term-wrap.pending { opacity: 0; pointer-events: none; animation: none; }
+.term-wrap:not(.pending) .term { animation: term-open 0.7s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes term-open {
+  0%   { transform: translate(-42vw, 46vh) scale(0.12); opacity: 0; }
+  35%  { opacity: 1; }
+  100% { transform: none; opacity: 1; }
+}
+
+/* ---------- macOS Terminal look ---------- */
+.term-wrap { background: rgba(0, 0, 0, 0.28); backdrop-filter: none; -webkit-backdrop-filter: none; }
+.term.mac { width: min(660px, 100%); border-radius: 10px; background: #1e1e1e; border: 1px solid #3d3d3f; box-shadow: 0 0 0 0.5px rgba(0,0,0,.6), 0 28px 70px rgba(0,0,0,.55); font-family: "SF Mono", Menlo, Monaco, "JetBrains Mono", ui-monospace, monospace; font-size: 0.8rem; color: #e6e6e6; transform-origin: 50% 50%; }
+.term.mac .term-bar { position: relative; justify-content: flex-start; gap: 8px; padding: 0 13px; height: 28px; background: linear-gradient(#3b3b3d, #2f2f31); border-bottom: 1px solid #1a1a1a; }
+.term.mac .term-bar i { width: 12px; height: 12px; }
+.term.mac .term-bar span { position: absolute; left: 0; right: 0; margin: 0; text-align: center; color: #b5b5b8; font-family: -apple-system, "Inter", system-ui, sans-serif; font-size: 0.78rem; pointer-events: none; }
+.term.mac .term-body { height: 330px; min-height: 0; max-height: 60vh; padding: 10px 12px; line-height: 1.45; color: #e6e6e6; white-space: pre-wrap; }
+.term.mac .dim { color: #9a9a9e; }
+.mac-caret { display: inline-block; width: 0.6em; height: 1.15em; vertical-align: -0.2em; background: #c7c7c7; animation: blink 1.1s steps(1) infinite; }
+/* macOS opens windows with a quick scale-up and fade, no slide */
+.term-wrap:not(.pending) .term.mac { animation: mac-open 0.28s cubic-bezier(.2,.9,.3,1.2) both; }
+@keyframes mac-open { from { transform: scale(0.9); opacity: 0; } to { transform: none; opacity: 1; } }
+
+/* ---------- OS variants ---------- */
+.mac-caret { background: currentColor; opacity: 0.8; }
+.term.windows .dim, .term.linux .dim { white-space: pre-wrap; }
+
+/* Windows Command Prompt */
+.term.windows { width: min(700px, 100%); border-radius: 8px; background: #0c0c0c; border: 1px solid #3a3a3a; box-shadow: 0 28px 70px rgba(0,0,0,.55); font-family: Consolas, "Cascadia Mono", "JetBrains Mono", monospace; font-size: 0.82rem; color: #cccccc; transform-origin: 50% 50%; }
+.term.windows .term-bar { position: relative; padding: 0 0 0 10px; height: 32px; background: #202020; border-bottom: 1px solid #2c2c2c; justify-content: flex-start; gap: 10px; }
+.term.windows .term-bar i { display: none; }
+.term.windows .win-icon { font: 600 0.68rem Consolas, monospace; color: #0c0c0c; background: #d4d4d4; padding: 1px 4px; border-radius: 2px; }
+.term.windows .term-bar span { margin: 0; color: #e6e6e6; font-family: "Segoe UI", system-ui, -apple-system, sans-serif; font-size: 0.78rem; }
+.win-ctl { margin-left: auto; display: flex; height: 100%; text-decoration: none; }
+.win-ctl em { font-style: normal; width: 46px; display: grid; place-items: center; color: #d4d4d4; font-size: 0.8rem; }
+.win-ctl em:last-child:hover { background: #c42b1c; }
+.term.windows .term-body { height: 330px; min-height: 0; max-height: 60vh; padding: 8px 10px; line-height: 1.35; color: #cccccc; white-space: pre-wrap; }
+.term.windows .dim { color: #999; }
+.term-wrap:not(.pending) .term.windows, .term-wrap:not(.pending) .term.linux { animation: mac-open 0.22s cubic-bezier(.2,.9,.3,1.1) both; }
+
+/* Ubuntu-style terminal */
+.term.linux { width: min(680px, 100%); border-radius: 10px 10px 6px 6px; background: #300a24; border: 1px solid #1d0516; box-shadow: 0 28px 70px rgba(0,0,0,.55); font-family: "Ubuntu Mono", "DejaVu Sans Mono", Menlo, "JetBrains Mono", monospace; font-size: 0.84rem; color: #f2f2f2; transform-origin: 50% 50%; }
+.term.linux .term-bar { position: relative; height: 34px; padding: 0 12px; background: #3d3d3d; border-bottom: 1px solid #222; justify-content: center; }
+.term.linux .term-bar i { display: none; }
+.term.linux .term-bar span { margin: 0; color: #e6e6e6; font-family: "Ubuntu", "Inter", system-ui, sans-serif; font-size: 0.8rem; }
+.term.linux .term-body { height: 330px; min-height: 0; max-height: 60vh; padding: 8px 10px; line-height: 1.4; color: #f2f2f2; white-space: pre-wrap; }
+.term.linux .dim { color: #c9a3b8; }
+
+/* ---------- Logo ---------- */
+.logo { display: inline-flex; align-items: center; gap: 8px; line-height: 1; }
+.logo img { width: 38px; height: 38px; display: block; object-fit: contain; transition: transform 0.3s; }
+.logo:hover img { transform: scale(1.12); }
+.logo-text { font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; }
+.logo-text span { color: var(--accent); }
+.blackout-text { position: relative; }
+.blackout-sub { max-width: 34ch; margin-inline: auto; line-height: 1.5; }
+
+/* ---------- Browser mock (AAK Decor) ---------- */
+.browser { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--surface-strong); }
+.browser-bar { display: flex; align-items: center; gap: 6px; padding: 8px 12px; border-bottom: 1px solid var(--border); background: color-mix(in srgb, var(--bg-2) 70%, transparent); }
+.browser-bar i { width: 9px; height: 9px; border-radius: 50%; background: var(--border); }
+.browser-bar span { margin-left: 10px; flex: 1; text-align: center; font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); background: var(--surface); border-radius: 999px; padding: 2px 10px; }
+.browser-body { padding: 18px; display: flex; flex-direction: column; gap: 14px; }
+.b-hero { padding: 22px 16px; border-radius: 8px; background: linear-gradient(120deg, color-mix(in srgb, var(--accent) 30%, transparent), color-mix(in srgb, var(--accent-2) 25%, transparent)); font-family: var(--font-display); font-size: 1.05rem; line-height: 1.25; }
+.b-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.b-tags span { font-size: 0.78rem; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface); }
+
+/* ---------- LeetCode ---------- */
+.leetcode { padding-block: 70px; }
+.lc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px; margin-top: 36px; }
+.lc-tile { padding: 26px; border-radius: var(--radius); background: var(--surface); border: 1px solid var(--border); backdrop-filter: blur(14px); transition: transform 0.3s, border-color 0.3s; display: flex; flex-direction: column; gap: 6px; }
+.lc-tile:hover { transform: translateY(-6px); border-color: var(--accent); }
+.lc-tile strong { font-family: var(--font-display); font-size: clamp(2rem, 5vw, 2.8rem); line-height: 1; background: linear-gradient(100deg, var(--accent), var(--accent-3)); -webkit-background-clip: text; background-clip: text; color: transparent; width: fit-content; }
+.lc-tile span { color: var(--muted); font-size: 0.9rem; }
+.lc-best { margin-top: 22px; color: var(--muted); }
+.lc-best b { color: var(--fg); }
+.leetcode .card-link.strong { margin-top: 18px; }
+.lc-updated { margin-top: 10px; font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+.lc-updated::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--accent-3); }
+.lc-tile[hidden] { display: none; }
+.lc-updated[hidden] { display: none; }

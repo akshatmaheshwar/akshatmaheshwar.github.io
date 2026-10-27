@@ -45,18 +45,74 @@
   }, { threshold: 0.12 }) : null;
   $$('.reveal').forEach(function (el) { io ? io.observe(el) : el.classList.add('in'); });
 
-  $$('[data-count]').forEach(function (el) {
+  function animateCount(el, delay) {
     var target = parseInt(el.dataset.count, 10);
-    if (reduce) { el.textContent = target; return; }
+    var pre = el.dataset.prefix || '', suf = el.dataset.suffix || '';
+    function fmt(v) { return pre + v.toLocaleString('en-US') + suf; }
+    if (reduce) { el.textContent = fmt(target); return; }
     var start = null;
     function step(ts) {
-      if (!start) start = ts + 500;
+      if (!start) start = ts + (delay || 0);
       var t = Math.min(Math.max((ts - start) / 1100, 0), 1);
-      el.textContent = Math.round(target * (1 - Math.pow(1 - t, 3)));
+      el.textContent = fmt(Math.round(target * (1 - Math.pow(1 - t, 3))));
       if (t < 1) requestAnimationFrame(step);
     }
     requestAnimationFrame(step);
-  });
+  }
+  $$('.stats [data-count]').forEach(function (el) { animateCount(el, 500); });
+
+  /* ---------- LeetCode stats ----------
+     leetcode-stats.json is refreshed daily by a GitHub Action (see .github/workflows).
+     If the file is missing or the request fails, the figures written in the HTML are used. */
+  var lcTiles = $$('.lc-tile strong');
+  function loadLeetCode() {
+    var ctrl = window.AbortController ? new AbortController() : null;
+    var timer = ctrl ? setTimeout(function () { ctrl.abort(); }, 4000) : null;
+    return fetch('leetcode-stats.json', ctrl ? { signal: ctrl.signal, cache: 'no-cache' } : { cache: 'no-cache' })
+      .then(function (r) { if (!r.ok) throw new Error('no stats'); return r.json(); })
+      .then(function (d) {
+        var set = function (i, v, suffix) {
+          if (typeof v !== 'number' || !isFinite(v) || !lcTiles[i]) return;
+          lcTiles[i].dataset.count = Math.round(v);
+          if (suffix !== undefined) lcTiles[i].dataset.suffix = suffix;
+        };
+        set(0, d.solved, '');
+        set(1, d.rating);
+        set(2, d.contests);
+        set(3, d.topPercentage);
+        if (typeof d.ranking === 'number' && d.ranking > 0) {
+          set(4, d.ranking);
+          var rt = $('#lc-rank-tile'); if (rt) rt.hidden = false;
+        }
+        var note = $('#lc-updated');
+        if (note && d.updated) {
+          var when = new Date(d.updated);
+          if (!isNaN(when)) {
+            note.textContent = 'Live from LeetCode, updated ' + when.toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' });
+            note.hidden = false;
+          }
+        }
+        var best = $('#lc-best');
+        if (best && typeof d.globalRanking === 'number' && typeof d.totalParticipants === 'number') {
+          best.innerHTML = 'Current contest ranking: <b>' + d.globalRanking.toLocaleString('en-US') + '</b> out of ' + d.totalParticipants.toLocaleString('en-US') + ' rated participants.';
+        }
+      })
+      .catch(function () { /* keep the numbers written in the HTML */ })
+      .then(function () { if (timer) clearTimeout(timer); });
+  }
+  var lcReady = loadLeetCode();
+  var lcSection = $('#leetcode');
+  function runLcCounters() { lcTiles.forEach(function (el, i) { animateCount(el, i * 80); }); }
+  if (lcSection && 'IntersectionObserver' in window && !reduce) {
+    var lcIo = new IntersectionObserver(function (entries) {
+      if (!entries[0].isIntersecting) return;
+      lcIo.disconnect();
+      lcReady.then(runLcCounters);
+    }, { threshold: 0.25 });
+    lcIo.observe(lcSection);
+  } else {
+    lcReady.then(runLcCounters);
+  }
 
   /* ---------- Page progress, nav state, cursor glow ---------- */
   var bar = $('#page-progress'), nav = $('#nav');
@@ -126,6 +182,8 @@
     var max = rail.scrollWidth - rail.clientWidth;
     fill.style.transform = 'scaleX(' + Math.max(0.06, max > 0 ? rail.scrollLeft / max : 1) + ')';
     index = nearest();
+    if (max > 0 && max - rail.scrollLeft < 6) index = total - 1;
+    if (rail.scrollLeft < 6) index = 0;
     cards.forEach(function (c, i) { c.classList.toggle('active', i === index); });
     counter.textContent = pad(index + 1) + ' / ' + pad(total);
     prev.disabled = index === 0;
@@ -203,12 +261,64 @@
   var clicks = 0, dodges = 0, busy = false;
   var labels = ['Do not click', 'I said do not click', 'Seriously, stop', 'Last warning', 'Okay, you win'];
 
-  // 1. "Delete System32" prank: fake command prompt, black screen, "gotchu"
-  var sysFiles = ['ntoskrnl.exe', 'kernel32.dll', 'user32.dll', 'hal.dll', 'winlogon.exe', 'explorer.exe', 'drivers\\disk.sys', 'config\\SYSTEM', 'cmd.exe', 'notepad.exe', 'msvcrt.dll', 'tcpip.sys', 'ntdll.dll', 'svchost.exe', 'drivers\\ntfs.sys', 'shell32.dll', 'lsass.exe', 'wininit.exe'];
+  // 1. "Delete the system" prank. The fake terminal matches the visitor's operating system.
+  function detectOS() {
+    var forced = (location.search.match(/[?&]os=(mac|windows|linux)/) || [])[1];
+    if (forced) return forced;
+    var ua = navigator.userAgent || '';
+    var plat = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || '';
+    if (/iPhone|iPad|iPod/i.test(ua) || (plat === 'MacIntel' && navigator.maxTouchPoints > 1)) return 'mac';
+    if (/Android/i.test(ua)) return 'linux';
+    if (/Win/i.test(plat) || /Windows/i.test(ua)) return 'windows';
+    if (/Mac/i.test(plat) || /Mac OS/i.test(ua)) return 'mac';
+    if (/Linux|CrOS|X11/i.test(plat + ua)) return 'linux';
+    return 'mac';
+  }
+  function lastLogin() {
+    var d = new Date(), days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], mons = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    function p(n) { return (n < 10 ? '0' : '') + n; }
+    return days[d.getDay()] + ' ' + mons[d.getMonth()] + ' ' + d.getDate() + ' ' + p(d.getHours()) + ':' + p(d.getMinutes()) + ':' + p(d.getSeconds());
+  }
+  var OS = {
+    mac: {
+      title: 'akshat \u2014 -zsh \u2014 80\u00d724',
+      banner: function () { return ['Last login: ' + lastLogin() + ' on ttys000']; },
+      prompt: 'akshat@MacBook-Pro ~ % ',
+      cmd: 'sudo rm -rfv /System/*',
+      password: 'Password:',
+      files: ['/System/Library/CoreServices/Finder.app/Contents/MacOS/Finder', '/System/Library/CoreServices/Dock.app/Contents/MacOS/Dock', '/System/Library/CoreServices/loginwindow.app/Contents/MacOS/loginwindow', '/System/Library/CoreServices/SystemUIServer.app', '/System/Library/Frameworks/Foundation.framework/Foundation', '/System/Library/Frameworks/AppKit.framework/AppKit', '/System/Library/Kernels/kernel', '/System/Library/PrivateFrameworks/SkyLight.framework/SkyLight', '/System/Library/CoreServices/Spotlight.app', '/System/Library/Extensions/AppleAPFS.kext', '/System/Library/Frameworks/Metal.framework/Metal', '/System/Library/CoreServices/launchservicesd', '/System/Applications/Safari.app', '/System/Applications/Utilities/Terminal.app'],
+      line: function (f) { return f; },
+      denied: function (f) { return 'rm: ' + f + ': Operation not permitted'; }
+    },
+    windows: {
+      title: 'Command Prompt',
+      banner: function () { return ['Microsoft Windows [Version 10.0.22631.4460]', '(c) Microsoft Corporation. All rights reserved.', '']; },
+      prompt: 'C:\\Users\\Akshat>',
+      cmd: 'del /f /s /q C:\\Windows\\System32\\*',
+      password: null,
+      files: ['ntoskrnl.exe', 'kernel32.dll', 'user32.dll', 'hal.dll', 'winlogon.exe', 'explorer.exe', 'drivers\\disk.sys', 'config\\SYSTEM', 'cmd.exe', 'notepad.exe', 'msvcrt.dll', 'tcpip.sys', 'ntdll.dll', 'svchost.exe', 'drivers\\ntfs.sys', 'shell32.dll', 'lsass.exe'],
+      line: function (f) { return 'Deleted file - C:\\Windows\\System32\\' + f; },
+      denied: function (f) { return 'C:\\Windows\\System32\\' + f + '\n        Access is denied.'; }
+    },
+    linux: {
+      title: 'akshat@ubuntu: ~',
+      banner: function () { return []; },
+      prompt: 'akshat@ubuntu:~$ ',
+      cmd: 'sudo rm -rfv --no-preserve-root /',
+      password: '[sudo] password for akshat: ',
+      files: ['/usr/bin/python3', '/usr/lib/x86_64-linux-gnu/libc.so.6', '/etc/passwd', '/etc/fstab', '/boot/vmlinuz', '/bin/bash', '/usr/bin/sudo', '/lib/systemd/systemd', '/etc/ssh/sshd_config', '/usr/bin/apt', '/var/log/syslog', '/usr/bin/gnome-shell', '/sbin/init', '/etc/hosts'],
+      line: function (f) { return "removed '" + f + "'"; },
+      denied: function (f) { return "rm: cannot remove '/sys/kernel/security': Operation not permitted"; }
+    }
+  };
   function sysDemo(done) {
+    var os = detectOS(), cfg = OS[os];
     var wrap = document.createElement('div');
-    wrap.className = 'term-wrap';
-    wrap.innerHTML = '<div class="term" role="dialog" aria-label="Command prompt"><div class="term-bar"><i></i><i></i><i></i><span>Administrator: Command Prompt</span></div><div class="term-body" id="sys-body"></div></div>';
+    wrap.className = 'term-wrap pending';
+    var bar = os === 'windows'
+      ? '<div class="term-bar"><b class="win-icon">C:\\</b><span>Administrator: ' + cfg.title + '</span><u class="win-ctl"><em>\u2013</em><em>\u25a1</em><em>\u2715</em></u></div>'
+      : '<div class="term-bar"><i></i><i></i><i></i><span>' + cfg.title + '</span></div>';
+    wrap.innerHTML = '<div class="term ' + os + '" role="dialog" aria-label="Terminal">' + bar + '<div class="term-body" id="sys-body"></div></div>';
     document.body.appendChild(wrap);
     var body = wrap.querySelector('#sys-body');
     var alive = true, timers = [], black = null;
@@ -225,28 +335,48 @@
     document.addEventListener('keydown', onKey);
     wrap.addEventListener('click', finish);
 
-    var cmd = 'C:\\> del /f /s /q C:\\Windows\\System32\\*';
-    var line = document.createElement('div'); line.className = 'cmd'; body.appendChild(line);
-    var i = 0;
-    (function type() {
-      if (!alive) return;
-      i = reduce ? cmd.length : i + 1;
-      line.textContent = cmd.slice(0, i);
-      if (i < cmd.length) return later(type, 45);
-      later(spill, 500);
-    })();
+    var caret = document.createElement('span'); caret.className = 'mac-caret';
+    function addLine(text, cls) {
+      var d = document.createElement('div'); if (cls) d.className = cls;
+      d.textContent = text; body.appendChild(d);
+      body.scrollTop = body.scrollHeight;
+      return d;
+    }
+    function park(el) { el.appendChild(caret); body.scrollTop = body.scrollHeight; }
 
-    var n = 0;
+    var START = reduce ? 0 : 1500, OPEN = reduce ? 0 : 450;
+    later(function () { wrap.classList.remove('pending'); }, START);
+
+    var cmd = cfg.cmd, line;
+    later(function () {
+      cfg.banner().forEach(function (t) { addLine(t || '\u00a0'); });
+      line = addLine(cfg.prompt); park(line);
+      var i = 0;
+      (function type() {
+        if (!alive) return;
+        i = reduce ? cmd.length : i + 1;
+        line.textContent = cfg.prompt + cmd.slice(0, i); park(line);
+        if (i < cmd.length) return later(type, 55 + Math.random() * 40);
+        later(afterEnter, 450);
+      })();
+    }, START + OPEN);
+
+    function afterEnter() {
+      if (!alive) return;
+      if (cfg.password) { var pw = addLine(cfg.password); park(pw); later(spill, reduce ? 200 : 1500); }
+      else later(spill, reduce ? 100 : 500);
+    }
+
+    var n = 0, total = reduce ? 8 : 30;
     function spill() {
       if (!alive) return;
-      var d = document.createElement('div');
-      d.className = n % 7 === 6 ? 'err' : 'dim';
-      d.textContent = (n % 7 === 6 ? 'Access is denied, continuing anyway: ' : 'Deleted file - C:\\Windows\\System32\\') + sysFiles[n % sysFiles.length];
-      body.appendChild(d);
-      body.scrollTop = body.scrollHeight;
+      var f = cfg.files[n % cfg.files.length];
+      if (n % 9 === 8) addLine(cfg.denied(f), 'dim');
+      else addLine(cfg.line(f));
       n++;
-      if (n < (reduce ? 8 : 26)) later(spill, 70);
-      else later(blackout, 400);
+      park(body.lastChild);
+      if (n < total) later(spill, 60);
+      else later(blackout, 500);
     }
 
     function blackout() {
@@ -259,7 +389,7 @@
       wrap.remove();
       later(function () {
         var t = black.querySelector('#gotchu');
-        t.innerHTML = 'gotchu<span class="blackout-sub">Your files are fine. This is just a website. 😎</span>';
+        t.innerHTML = 'gotcha<span class="blackout-sub">Your files are fine. This is just a website. \ud83d\ude02</span>';
         t.classList.add('show');
         later(finish, 3800);
       }, reduce ? 300 : 1900);

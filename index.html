@@ -8,6 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap">
+  <link rel="icon" type="image/png" sizes="64x64" href="assets/favicon-64.png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -17,7 +19,7 @@
   <div class="cursor-glow" id="cursor-glow" aria-hidden="true"></div>
 
   <header class="nav" id="nav">
-    <a class="logo" href="#top" aria-label="Akshat Saravanan, back to top">AS<span>.</span></a>
+    <a class="logo" href="#top" aria-label="Akshat Saravanan, back to top"><img src="assets/logo.png" width="38" height="38" alt=""><span class="logo-text">AS<span>.</span></span></a>
     <nav aria-label="Sections">
       <a href="#work">Work</a>
       <a href="#experience">Experience</a>
@@ -45,7 +47,7 @@
           <a class="btn ghost magnetic" href="https://www.linkedin.com/in/akshat-saravanan-2124ba215/" target="_blank" rel="noopener">LinkedIn</a>
         </div>
         <ul class="stats reveal" style="--d:320ms">
-          <li><strong data-count="7">0</strong><span>projects shown here</span></li>
+          <li><strong data-count="9">0</strong><span>projects shown here</span></li>
           <li><strong data-count="17">0</strong><span>repositories on GitHub</span></li>
           <li><strong data-count="2">0</strong><span>cloud platforms: Azure and GCP</span></li>
         </ul>
@@ -62,7 +64,7 @@
           <p class="sub">Drag, swipe, use the arrow keys or the buttons. The first one is the one I'd start with.</p>
         </div>
         <div class="controls reveal" style="--d:100ms">
-          <span class="counter" id="counter" aria-live="polite">01 / 07</span>
+          <span class="counter" id="counter" aria-live="polite">01 / 09</span>
           <button class="round" id="prev" type="button" aria-label="Previous project">←</button>
           <button class="round" id="next" type="button" aria-label="Next project">→</button>
         </div>
@@ -214,6 +216,48 @@
           <a class="card-link" href="https://github.com/akshatmaheshwar/laland" target="_blank" rel="noopener">View source <span aria-hidden="true">↗</span></a>
         </article>
 
+                <!-- 8 -->
+        <article class="card" data-tilt>
+          <div class="card-top"><span class="badge">AI · Hackathon</span><span class="num">08</span></div>
+          <h3>UQ Agent</h3>
+          <p class="blurb">A Chrome extension that clicks through the university portal for you. Ask for something in plain English and it finds the page. Built with a team at the UQCS hackathon 2025.</p>
+          <ol class="flow" aria-label="How a request is handled">
+            <li>Chat in extension</li><li>Local Python server</li><li>Vector search</li><li>Step plan</li><li>Playwright clicks</li>
+          </ol>
+          <ul class="points">
+            <li>The front end is a React and Vite Chrome extension (Manifest V3) with a chat window. Chat history is stored in Firebase.</li>
+            <li>A small Python server turns the request into steps. It converts the sentence into an embedding and finds the closest stored navigation example in a ChromaDB vector database.</li>
+            <li>Playwright then drives the user's own open Chrome tab through those steps: click, hover, fill, type, select and wait.</li>
+            <li>Portals are awkward, so it waits for the Angular page to settle, matches button labels with fuzzy text matching, caches the selectors it has found, and follows new tabs.</li>
+            <li>Early prototypes asked a local Llama model (through Ollama) to plan the steps directly.</li>
+          </ul>
+          <div class="chips"><span>Python</span><span>React</span><span>Vite</span><span>Chrome extension</span><span>Playwright</span><span>ChromaDB</span><span>Sentence embeddings</span><span>Firebase</span></div>
+          <p class="note-sm">Team project.</p>
+        </article>
+
+        <!-- 9 -->
+        <article class="card" data-tilt>
+          <div class="card-top"><span class="badge live">Freelance · Live site</span><span class="num">09</span></div>
+          <h3>AAK Decor website</h3>
+          <p class="blurb">A website for a Dubai company that fabricates and installs GRC, GRP and GRG products. I designed and built it on WordPress as a freelance project.</p>
+          <div class="browser" aria-label="Browser window showing aakdecor.com">
+            <div class="browser-bar"><i></i><i></i><i></i><span>aakdecor.com</span></div>
+            <div class="browser-body">
+              <div class="b-hero"><b>Fabricators and installers of GRC, GRP and GRG</b></div>
+              <div class="b-tags"><span>GRC cladding</span><span>GRP models</span><span>GRG interiors</span></div>
+            </div>
+          </div>
+          <ul class="points">
+            <li>Built independently, start to finish, for a real business, using WordPress with custom theming and content management.</li>
+            <li>The site presents the company's services, past projects and contact options, with a clear path to ask for a quote.</li>
+            <li>Delivered as a client-ready site that gives the company a professional web presence.</li>
+          </ul>
+          <div class="chips"><span>WordPress</span><span>Custom theming</span><span>Content management</span><span>Freelance</span></div>
+          <div class="card-links">
+            <a class="card-link strong" href="https://aakdecor.com/" target="_blank" rel="noopener">Visit the site <span aria-hidden="true">↗</span></a>
+          </div>
+        </article>
+
         <div class="rail-pad" aria-hidden="true"></div>
       </div>
 
@@ -254,6 +298,25 @@
             <p>CGPA 8.58 out of 10.</p>
           </li>
         </ol>
+      </div>
+    </section>
+
+    <!-- LEETCODE -->
+    <section class="leetcode" id="leetcode" aria-labelledby="lc-title">
+      <div class="container">
+        <p class="kicker reveal">Problem solving</p>
+        <h2 id="lc-title" class="reveal">Competitive programming</h2>
+        <p class="sub reveal">I practise data structures and algorithms on LeetCode, and I take part in its timed weekly contests.</p>
+        <div class="lc-grid">
+          <div class="lc-tile reveal"><strong data-count="800" data-suffix="+">0</strong><span>problems solved</span></div>
+          <div class="lc-tile reveal" style="--d:60ms"><strong data-count="1668">0</strong><span>contest rating</span></div>
+          <div class="lc-tile reveal" style="--d:120ms"><strong data-count="30">0</strong><span>contests entered</span></div>
+          <div class="lc-tile reveal" style="--d:180ms"><strong data-count="17" data-prefix="Top " data-suffix="%">0</strong><span>of rated users globally</span></div>
+          <div class="lc-tile reveal" id="lc-rank-tile" style="--d:240ms" hidden><strong data-count="0" data-prefix="#">0</strong><span>global rank on LeetCode</span></div>
+        </div>
+        <p class="lc-best reveal" id="lc-best">Best finish: rank <b>809</b> out of more than 20,000 in Weekly Contest 372.</p>
+        <p class="lc-updated" id="lc-updated" hidden></p>
+        <p class="reveal"><a class="card-link strong" href="https://leetcode.com/u/akshatmaheshwar78/" target="_blank" rel="noopener">View my LeetCode profile <span aria-hidden="true">↗</span></a></p>
       </div>
     </section>
 
