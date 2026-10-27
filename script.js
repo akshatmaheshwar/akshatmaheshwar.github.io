@@ -17,6 +17,21 @@
     try { localStorage.setItem('theme', next); } catch (e) {}
   });
 
+  /* ---------- Mobile menu ---------- */
+  (function () {
+    var header = $('#nav'), btn = $('#menu-toggle');
+    function setOpen(open) {
+      header.classList.toggle('open', open);
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    }
+    btn.addEventListener('click', function () { setOpen(!header.classList.contains('open')); });
+    $$('.nav nav a').forEach(function (a) { a.addEventListener('click', function () { setOpen(false); }); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setOpen(false); });
+    document.addEventListener('click', function (e) { if (!header.contains(e.target)) setOpen(false); });
+    window.addEventListener('resize', function () { if (window.innerWidth > 720) setOpen(false); });
+  })();
+
   /* ---------- Typed headline ---------- */
   var typed = $('#typed');
   var phrases = ['AI-enabled apps.', 'cloud-native systems.', 'full-stack products.', 'things that ship.'];
