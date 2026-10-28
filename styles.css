@@ -452,3 +452,22 @@ h2 { font-size: clamp(2rem, 5vw, 3.4rem); font-weight: 700; }
 }
 
 .footer .dnc:disabled, .footer .dnc:disabled:hover, .footer .dnc:disabled:focus-visible { color: inherit; cursor: default; opacity: 0.55; pointer-events: none; transition: none; outline: none; }
+
+/* ---------- Native text sizes for the fake terminals and warnings ----------
+   Terminals use each system's default terminal font size; the iOS sheet follows the user's Dynamic Type setting
+   (Safari on iPhone and iPad); the Android dialog uses Material sizes in rem, which follow the browser/system font scale. */
+.term.mac { width: min(560px, 100%); font-size: 11px; }
+.term.mac .term-body { height: 354px; line-height: 14px; max-height: 70vh; }
+.term.windows { width: min(980px, 100%); font-size: 16px; }
+.term.windows .term-body { height: 560px; line-height: 18px; max-height: 70vh; }
+.term.linux { width: min(800px, 100%); font-size: 16px; }
+.term.linux .term-body { height: 500px; line-height: 1.3; max-height: 70vh; }
+.ios-group p { font-size: 13px; }
+.ios-erase, .ios-cancel { font-size: 20px; }
+.and-dialog h4 { font-size: 1.5rem; }
+.and-dialog p, .and-btns { font-size: 0.875rem; }
+@supports (font: -apple-system-body) {
+  .ios-group p { font: -apple-system-footnote; }
+  .ios-erase { font: -apple-system-title3; font-weight: 400; }
+  .ios-cancel { font: -apple-system-title3; font-weight: 600; }
+}
