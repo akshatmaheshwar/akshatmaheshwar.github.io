@@ -370,6 +370,13 @@ h2 { font-size: clamp(2rem, 5vw, 3.4rem); font-weight: 700; }
 .lc-tile:hover { transform: translateY(-6px); border-color: var(--accent); }
 .lc-tile strong { font-family: var(--font-display); font-size: clamp(2rem, 5vw, 2.8rem); line-height: 1; background: linear-gradient(100deg, var(--accent), var(--accent-3)); -webkit-background-clip: text; background-clip: text; color: transparent; width: fit-content; }
 .lc-tile span { color: var(--muted); font-size: 0.9rem; }
+.lc-tile small { color: var(--muted); font-size: 0.75rem; opacity: 0.85; margin-top: -2px; }
+.lc-tile small[hidden] { display: none; }
+@media (min-width: 900px) {
+  .lc-grid { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 14px; }
+  .lc-tile { padding: 22px; }
+  .lc-tile strong { font-size: clamp(1.7rem, 2.5vw, 2.5rem); white-space: nowrap; }
+}
 .lc-best { margin-top: 22px; color: var(--muted); }
 .lc-best b { color: var(--fg); }
 .leetcode .card-link.strong { margin-top: 18px; }
@@ -377,3 +384,71 @@ h2 { font-size: clamp(2rem, 5vw, 3.4rem); font-weight: 700; }
 .lc-updated::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--accent-3); }
 .lc-tile[hidden] { display: none; }
 .lc-updated[hidden] { display: none; }
+
+/* ---------- "Do not click": phone and tablet erase screens ---------- */
+.mob-wrap { position: fixed; inset: 0; z-index: 200; overflow: hidden; }
+.mob-wrap.pending { opacity: 0; pointer-events: none; }
+.mob, .mob-dim, .mob-erase { position: absolute; inset: 0; }
+.mob-dim { background: rgba(0, 0, 0, 0.55); animation: fadein 0.3s both; }
+.mob-erase { background: #000; display: grid; place-content: center; justify-items: center; gap: 22px; opacity: 0; pointer-events: none; transition: opacity 0.35s; }
+.mob-wrap.erasing .mob-erase { opacity: 1; }
+.mob .tap { position: absolute; left: 50%; top: 50%; width: 54px; height: 54px; margin: -27px 0 0 -27px; border-radius: 50%; background: rgba(255,255,255,0.35); transform: scale(0); opacity: 0; pointer-events: none; }
+.mob .pressed .tap { animation: tap 0.45s ease-out forwards; }
+@keyframes tap { 0% { transform: scale(0.2); opacity: 0.9; } 100% { transform: scale(1.4); opacity: 0; } }
+
+/* iOS and iPadOS: action sheet, then a black screen with a progress bar */
+.mob.ios { font-family: -apple-system, "SF Pro Text", "Helvetica Neue", "Inter", system-ui, sans-serif; }
+.ios-sheet { position: absolute; left: 0; right: 0; bottom: 0; width: min(430px, 100%); margin-inline: auto; padding: 0 8px max(10px, env(safe-area-inset-bottom)); display: grid; gap: 8px; }
+.mob-wrap:not(.pending) .ios-sheet { animation: sheet-up 0.45s cubic-bezier(.2,.9,.25,1) both; }
+@keyframes sheet-up { from { transform: translateY(110%); } to { transform: none; } }
+.ios-group, .ios-cancel { background: rgba(44, 44, 46, 0.97); border-radius: 14px; color: #fff; text-align: center; }
+.ios-group p { margin: 0; padding: 14px 16px; font-size: 0.8rem; line-height: 1.35; color: #98989f; border-bottom: 1px solid rgba(255,255,255,0.12); }
+.ios-erase { position: relative; overflow: hidden; width: 100%; padding: 17px 16px; border: 0; background: transparent; color: #ff453a; font: 400 1.2rem/1 inherit; font-family: inherit; transition: background 0.15s; }
+.ios-erase.pressed { background: rgba(255,255,255,0.14); }
+.ios-cancel { padding: 17px 16px; font-size: 1.2rem; font-weight: 600; color: #0a84ff; }
+.ios-bar { width: min(200px, 56vw); height: 4px; border-radius: 4px; background: rgba(255,255,255,0.22); overflow: hidden; }
+.ios-bar b { display: block; width: 0; height: 100%; background: #fff; border-radius: 4px; }
+.mob-wrap.erasing .ios-bar b { width: 100%; transition: width 4.2s cubic-bezier(.35,.1,.4,1); }
+
+/* Android: Material dialog, then a spinner */
+.mob.android { font-family: Roboto, "Google Sans", "Inter", system-ui, sans-serif; }
+.and-dialog { position: absolute; left: 50%; top: 50%; width: min(312px, calc(100% - 48px)); padding: 24px 24px 18px; border-radius: 28px; background: #2b2930; color: #e6e0e9; transform: translate(-50%, -50%); }
+.mob-wrap:not(.pending) .and-dialog { animation: and-in 0.28s cubic-bezier(.2,.9,.3,1) both; }
+@keyframes and-in { from { opacity: 0; transform: translate(-50%, -46%) scale(0.92); } to { opacity: 1; transform: translate(-50%, -50%); } }
+.and-dialog h4 { margin: 0 0 14px; font-size: 1.5rem; font-weight: 400; line-height: 1.25; }
+.and-dialog p { margin: 0 0 22px; font-size: 0.9rem; line-height: 1.45; color: #cac4d0; }
+.and-btns { display: flex; justify-content: flex-end; align-items: center; gap: 8px; font-size: 0.9rem; font-weight: 500; color: #d0bcff; }
+.and-btns span { padding: 10px 12px; }
+.and-erase { position: relative; overflow: hidden; padding: 10px 12px; border: 0; border-radius: 20px; background: transparent; color: inherit; font: inherit; transition: background 0.15s; }
+.and-erase.pressed { background: rgba(208, 188, 255, 0.2); }
+.and-spin { width: 44px; height: 44px; border-radius: 50%; border: 4px solid rgba(255,255,255,0.18); border-top-color: #fff; animation: spin 0.9s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.mob.android .mob-erase p { margin: 0; color: #cac4d0; font-size: 1rem; }
+@media (prefers-reduced-motion: reduce) { .and-spin { animation: none; } .mob-wrap.erasing .ios-bar b { transition: none; } }
+
+/* ---------- Organisation logos (transparent, no tile) ---------- */
+.org-logo { display: grid; place-items: center; flex: none; }
+.org-logo img { display: block; height: 52px; width: auto; max-width: 150px; object-fit: contain; }
+.org-logo.tall img { height: 82px; }
+.org-logo.wide img { height: auto; width: 150px; max-width: none; }
+.org-logo.portrait img { height: 108px; }
+/* light and dark artwork: dark theme is the default, light theme sets data-theme="light" */
+.ol-d { display: block; }
+.ol-l { display: none !important; }
+:root[data-theme="light"] .ol-l { display: block !important; }
+:root[data-theme="light"] .ol-d { display: none !important; }
+.timeline li { display: grid; grid-template-columns: 150px minmax(0, 1fr); column-gap: 30px; align-items: start; }
+.timeline li > :not(.org-logo) { grid-column: 2; }
+.timeline .org-logo { grid-column: 1; grid-row: 1 / span 3; align-self: center; justify-self: center; }
+.title-row { display: flex; align-items: center; gap: 14px; }
+.title-row .org-logo.sm img { height: 46px; max-width: 70px; }
+@media (max-width: 720px) {
+  .timeline li { display: block; }
+  .timeline .org-logo { justify-self: start; place-items: start; margin-bottom: 12px; }
+  .timeline .org-logo img { height: 40px; max-width: 120px; }
+  .timeline .org-logo.tall img { height: 60px; }
+  .timeline .org-logo.wide img { width: 118px; height: auto; }
+  .timeline .org-logo.portrait img { height: 76px; }
+}
+
+.footer .dnc:disabled, .footer .dnc:disabled:hover, .footer .dnc:disabled:focus-visible { color: inherit; cursor: default; opacity: 0.55; pointer-events: none; transition: none; outline: none; }

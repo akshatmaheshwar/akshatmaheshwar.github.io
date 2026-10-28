@@ -103,7 +103,26 @@
 
         <!-- 2 -->
         <article class="card" data-tilt>
-          <div class="card-top"><span class="badge">Cloud · Kubernetes</span><span class="num">02</span></div>
+          <div class="card-top"><span class="badge">AI · Hackathon</span><span class="num">02</span></div>
+          <h3>UQ Agent</h3>
+          <p class="blurb">A Chrome extension that clicks through the university portal for you. Ask for something in plain English and it finds the page. Built with a team at the UQCS hackathon 2025.</p>
+          <ol class="flow" aria-label="How a request is handled">
+            <li>Chat in extension</li><li>Local Python server</li><li>Vector search</li><li>Step plan</li><li>Playwright clicks</li>
+          </ol>
+          <ul class="points">
+            <li>The front end is a React and Vite Chrome extension (Manifest V3) with a chat window. Chat history is stored in Firebase.</li>
+            <li>A small Python server turns the request into steps. It converts the sentence into an embedding and finds the closest stored navigation example in a ChromaDB vector database.</li>
+            <li>Playwright then drives the user's own open Chrome tab through those steps: click, hover, fill, type, select and wait.</li>
+            <li>Portals are awkward, so it waits for the Angular page to settle, matches button labels with fuzzy text matching, caches the selectors it has found, and follows new tabs.</li>
+            <li>Early prototypes asked a local Llama model (through Ollama) to plan the steps directly.</li>
+          </ul>
+          <div class="chips"><span>Python</span><span>React</span><span>Vite</span><span>Chrome extension</span><span>Playwright</span><span>ChromaDB</span><span>Sentence embeddings</span><span>Firebase</span></div>
+          <a class="card-link" href="https://github.com/akshatmaheshwar/uq-agent" target="_blank" rel="noopener">View source <span aria-hidden="true">↗</span></a>
+        </article>
+
+        <!-- 3 -->
+        <article class="card" data-tilt>
+          <div class="card-top"><span class="badge">Cloud · Kubernetes</span><span class="num">03</span></div>
           <h3>Cloud Parking</h3>
           <p class="blurb">A smart parking platform where users find a space on a map, book it and manage their bookings. Built twice on purpose: as one server and as three services.</p>
           <div class="diagram" aria-label="Three services: auth, booking and parking, each with its own database">
@@ -122,65 +141,9 @@
           <a class="card-link" href="https://github.com/akshatmaheshwar/cloud-parking" target="_blank" rel="noopener">View source <span aria-hidden="true">↗</span></a>
         </article>
 
-        <!-- 3 -->
-        <article class="card" data-tilt>
-          <div class="card-top"><span class="badge">AI · Local-first</span><span class="num">03</span></div>
-          <h3>Dungeon Scribe AI</h3>
-          <p class="blurb">Listens to a tabletop D&amp;D session, writes down what was said, and lets you ask the campaign archive questions afterwards. Everything runs on your own machine.</p>
-          <div class="pipeline" aria-label="Pipeline from microphone to searchable archive">
-            <span>Mic</span><i></i><span>Whisper</span><i></i><span>Ollama LLM</span><i></i><span>Archive</span>
-          </div>
-          <ul class="points">
-            <li>Real-time transcription with Faster-Whisper and voice activity detection, then a local Gemma model picks out events such as combat, item transfers and quest updates.</li>
-            <li>Falls back to rule-based pattern matching when no model is available.</li>
-            <li>Three backups of each session: SQLite, JSON summaries and raw transcript logs.</li>
-            <li>FastAPI backend, browser front end, character sheets, inventory and journal. Team project: I built modular components and documented the architecture.</li>
-          </ul>
-          <div class="chips"><span>Python</span><span>FastAPI</span><span>Faster-Whisper</span><span>Ollama</span><span>ChromaDB</span><span>SQLite</span><span>WebSocket</span></div>
-          <a class="card-link" href="https://github.com/akshatmaheshwar/dungeon-scribe-ai" target="_blank" rel="noopener">View source <span aria-hidden="true">↗</span></a>
-        </article>
-
         <!-- 4 -->
         <article class="card" data-tilt>
-          <div class="card-top"><span class="badge">Languages · Testing</span><span class="num">04</span></div>
-          <h3>ToyLang and a hybrid fuzzer</h3>
-          <p class="blurb">A small programming language written from scratch, plus a bug-finder that combines random mutation with a constraint solver.</p>
-          <pre class="code" aria-label="Example program with a hidden bug"><code><span class="c"># pseudocode: why random mutation struggles</span>
-<span class="k">if</span> x == <span class="n">7331</span>:
-  y = <span class="n">100</span> / (x - <span class="n">7331</span>)   <span class="c"># divide by zero</span></code></pre>
-          <p class="code-cap">Illustration of the kind of bug it targets. Random mutation almost never guesses 7331; the solver derives it.</p>
-          <ul class="points">
-            <li>Lexer, recursive-descent parser, syntax tree and a tree-walking interpreter that records branch and statement coverage.</li>
-            <li>The random fuzzer mutates inputs and keeps only those that reach new code.</li>
-            <li>When random search stalls, Z3 symbolic execution collects the conditions along a path and solves them to produce an input that reaches the unexplored branch.</li>
-            <li>Finds division by zero and assertion failures guarded by exact-match conditions that random mutation almost never hits.</li>
-          </ul>
-          <div class="chips"><span>Python</span><span>Z3</span><span>Symbolic execution</span><span>Fuzzing</span><span>Parsing</span></div>
-          <a class="card-link" href="https://github.com/akshatmaheshwar/Toylang" target="_blank" rel="noopener">View source <span aria-hidden="true">↗</span></a>
-        </article>
-
-        <!-- 5 -->
-        <article class="card" data-tilt>
-          <div class="card-top"><span class="badge">Machine learning</span><span class="num">05</span></div>
-          <h3>Search and Reinforcement Learning</h3>
-          <p class="blurb">Three university assignments that build from path finding to planning under uncertainty to deep reinforcement learning.</p>
-          <div class="steps" aria-label="Three stages">
-            <div><b>1</b><span>A* with a custom admissible heuristic</span></div>
-            <div><b>2</b><span>Value iteration, policy iteration, Q-learning</span></div>
-            <div><b>3</b><span>Deep Q-Networks in PyTorch</span></div>
-          </div>
-          <ul class="points">
-            <li>Cheese Hunter grid world: a heuristic built from precomputed lever-to-goal distances expands far fewer nodes than uniform cost search.</li>
-            <li>Planning and learning methods converge to the same optimal policy.</li>
-            <li>DQN on CartPole and LunarLander, with experiments on learning rate, epsilon decay, target-network updates and network size. The LunarLander agent averaged about 210 reward over 100 episodes, above the 200 success threshold.</li>
-          </ul>
-          <div class="chips"><span>Python</span><span>PyTorch</span><span>Gymnasium</span><span>NumPy</span><span>A*</span><span>DQN</span></div>
-          <a class="card-link" href="https://github.com/akshatmaheshwar/comp3702-ai" target="_blank" rel="noopener">View source <span aria-hidden="true">↗</span></a>
-        </article>
-
-        <!-- 6 -->
-        <article class="card" data-tilt>
-          <div class="card-top"><span class="badge live">Full-stack · Live demo</span><span class="num">06</span></div>
+          <div class="card-top"><span class="badge live">Full-stack · Live demo</span><span class="num">04</span></div>
           <h3>MenuMate</h3>
           <p class="blurb">Restaurant ordering from the table. Guests scan a QR code, order from their phone, and the kitchen sees it on a dashboard. It is deployed and you can open it.</p>
           <ol class="flow" aria-label="Order flow">
@@ -201,48 +164,10 @@
           <p class="note-sm">Free hosting: the first visit can take a short while to wake up.</p>
         </article>
 
-        <!-- 7 -->
+        <!-- 5 -->
         <article class="card" data-tilt>
-          <div class="card-top"><span class="badge">Frontend · REST APIs</span><span class="num">07</span></div>
-          <h3>Laland</h3>
-          <p class="blurb">A Spotify-inspired music streaming site written in plain HTML, CSS and JavaScript, with no framework and no build step.</p>
-          <div class="grid-tags" aria-label="Pages">
-            <span>Home feed</span><span>Song page</span><span>Community</span><span>Posts</span><span>Upload music</span>
-          </div>
-          <ul class="points">
-            <li>The home feed loads songs, a top-10 chart and upcoming local concerts from REST APIs, and renders them as cards.</li>
-            <li>Song pages read and post comments. The upload form sends an artist, title, genre and file to the API as form data.</li>
-            <li>A custom play and pause control sits on top of the browser's audio element.</li>
-            <li>The community chat room is simulated with scripted messages. It is an interface exercise, not a real-time backend.</li>
-          </ul>
-          <div class="chips"><span>HTML</span><span>CSS</span><span>JavaScript</span><span>fetch API</span><span>FormData</span></div>
-          <a class="card-link" href="https://github.com/akshatmaheshwar/laland" target="_blank" rel="noopener">View source <span aria-hidden="true">↗</span></a>
-        </article>
-
-                <!-- 8 -->
-        <article class="card" data-tilt>
-          <div class="card-top"><span class="badge">AI · Hackathon</span><span class="num">08</span></div>
-          <h3>UQ Agent</h3>
-          <p class="blurb">A Chrome extension that clicks through the university portal for you. Ask for something in plain English and it finds the page. Built with a team at the UQCS hackathon 2025.</p>
-          <ol class="flow" aria-label="How a request is handled">
-            <li>Chat in extension</li><li>Local Python server</li><li>Vector search</li><li>Step plan</li><li>Playwright clicks</li>
-          </ol>
-          <ul class="points">
-            <li>The front end is a React and Vite Chrome extension (Manifest V3) with a chat window. Chat history is stored in Firebase.</li>
-            <li>A small Python server turns the request into steps. It converts the sentence into an embedding and finds the closest stored navigation example in a ChromaDB vector database.</li>
-            <li>Playwright then drives the user's own open Chrome tab through those steps: click, hover, fill, type, select and wait.</li>
-            <li>Portals are awkward, so it waits for the Angular page to settle, matches button labels with fuzzy text matching, caches the selectors it has found, and follows new tabs.</li>
-            <li>Early prototypes asked a local Llama model (through Ollama) to plan the steps directly.</li>
-          </ul>
-          <div class="chips"><span>Python</span><span>React</span><span>Vite</span><span>Chrome extension</span><span>Playwright</span><span>ChromaDB</span><span>Sentence embeddings</span><span>Firebase</span></div>
-          <a class="card-link" href="https://github.com/akshatmaheshwar/uq-agent" target="_blank" rel="noopener">View source <span aria-hidden="true">↗</span></a>
-          <p class="note-sm">Team project.</p>
-        </article>
-
-        <!-- 9 -->
-        <article class="card" data-tilt>
-          <div class="card-top"><span class="badge live">Freelance · Live site</span><span class="num">09</span></div>
-          <h3>AAK Decor website</h3>
+          <div class="card-top"><span class="badge live">Freelance · Live site</span><span class="num">05</span></div>
+          <div class="title-row"><span class="org-logo sm"><img src="assets/logos/aak.png" alt="AAK Decor logo" loading="lazy"></span><h3>AAK Decor website</h3></div>
           <p class="blurb">A website for a Dubai company that fabricates and installs GRC, GRP and GRG products. I designed and built it on WordPress as a freelance project.</p>
           <div class="browser" aria-label="Browser window showing aakdecor.com">
             <div class="browser-bar"><i></i><i></i><i></i><span>aakdecor.com</span></div>
@@ -262,6 +187,80 @@
           </div>
         </article>
 
+        <!-- 6 -->
+        <article class="card" data-tilt>
+          <div class="card-top"><span class="badge">AI · Local-first</span><span class="num">06</span></div>
+          <h3>Dungeon Scribe AI</h3>
+          <p class="blurb">Listens to a tabletop D&amp;D session, writes down what was said, and lets you ask the campaign archive questions afterwards. Everything runs on your own machine.</p>
+          <div class="pipeline" aria-label="Pipeline from microphone to searchable archive">
+            <span>Mic</span><i></i><span>Whisper</span><i></i><span>Ollama LLM</span><i></i><span>Archive</span>
+          </div>
+          <ul class="points">
+            <li>Real-time transcription with Faster-Whisper and voice activity detection, then a local Gemma model picks out events such as combat, item transfers and quest updates.</li>
+            <li>Falls back to rule-based pattern matching when no model is available.</li>
+            <li>Three backups of each session: SQLite, JSON summaries and raw transcript logs.</li>
+            <li>FastAPI backend, browser front end, character sheets, inventory and journal. Team project: I built modular components and documented the architecture.</li>
+          </ul>
+          <div class="chips"><span>Python</span><span>FastAPI</span><span>Faster-Whisper</span><span>Ollama</span><span>ChromaDB</span><span>SQLite</span><span>WebSocket</span></div>
+          <a class="card-link" href="https://github.com/akshatmaheshwar/dungeon-scribe-ai" target="_blank" rel="noopener">View source <span aria-hidden="true">↗</span></a>
+        </article>
+
+        <!-- 7 -->
+        <article class="card" data-tilt>
+          <div class="card-top"><span class="badge">Frontend · REST APIs</span><span class="num">07</span></div>
+          <h3>Laland</h3>
+          <p class="blurb">A Spotify-inspired music streaming site written in plain HTML, CSS and JavaScript, with no framework and no build step.</p>
+          <div class="grid-tags" aria-label="Pages">
+            <span>Home feed</span><span>Song page</span><span>Community</span><span>Posts</span><span>Upload music</span>
+          </div>
+          <ul class="points">
+            <li>The home feed loads songs, a top-10 chart and upcoming local concerts from REST APIs, and renders them as cards.</li>
+            <li>Song pages read and post comments. The upload form sends an artist, title, genre and file to the API as form data.</li>
+            <li>A custom play and pause control sits on top of the browser's audio element.</li>
+            <li>The community chat room is simulated with scripted messages. It is an interface exercise, not a real-time backend.</li>
+          </ul>
+          <div class="chips"><span>HTML</span><span>CSS</span><span>JavaScript</span><span>fetch API</span><span>FormData</span></div>
+          <a class="card-link" href="https://github.com/akshatmaheshwar/laland" target="_blank" rel="noopener">View source <span aria-hidden="true">↗</span></a>
+        </article>
+
+        <!-- 8 -->
+        <article class="card" data-tilt>
+          <div class="card-top"><span class="badge">Languages · Testing</span><span class="num">08</span></div>
+          <h3>ToyLang and a hybrid fuzzer</h3>
+          <p class="blurb">A small programming language written from scratch, plus a bug-finder that combines random mutation with a constraint solver.</p>
+          <pre class="code" aria-label="Example program with a hidden bug"><code><span class="c"># pseudocode: why random mutation struggles</span>
+<span class="k">if</span> x == <span class="n">7331</span>:
+  y = <span class="n">100</span> / (x - <span class="n">7331</span>)   <span class="c"># divide by zero</span></code></pre>
+          <p class="code-cap">Illustration of the kind of bug it targets. Random mutation almost never guesses 7331; the solver derives it.</p>
+          <ul class="points">
+            <li>Lexer, recursive-descent parser, syntax tree and a tree-walking interpreter that records branch and statement coverage.</li>
+            <li>The random fuzzer mutates inputs and keeps only those that reach new code.</li>
+            <li>When random search stalls, Z3 symbolic execution collects the conditions along a path and solves them to produce an input that reaches the unexplored branch.</li>
+            <li>Finds division by zero and assertion failures guarded by exact-match conditions that random mutation almost never hits.</li>
+          </ul>
+          <div class="chips"><span>Python</span><span>Z3</span><span>Symbolic execution</span><span>Fuzzing</span><span>Parsing</span></div>
+          <a class="card-link" href="https://github.com/akshatmaheshwar/Toylang" target="_blank" rel="noopener">View source <span aria-hidden="true">↗</span></a>
+        </article>
+
+        <!-- 9 -->
+        <article class="card" data-tilt>
+          <div class="card-top"><span class="badge">Machine learning</span><span class="num">09</span></div>
+          <h3>Search and Reinforcement Learning</h3>
+          <p class="blurb">Three university assignments that build from path finding to planning under uncertainty to deep reinforcement learning.</p>
+          <div class="steps" aria-label="Three stages">
+            <div><b>1</b><span>A* with a custom admissible heuristic</span></div>
+            <div><b>2</b><span>Value iteration, policy iteration, Q-learning</span></div>
+            <div><b>3</b><span>Deep Q-Networks in PyTorch</span></div>
+          </div>
+          <ul class="points">
+            <li>Cheese Hunter grid world: a heuristic built from precomputed lever-to-goal distances expands far fewer nodes than uniform cost search.</li>
+            <li>Planning and learning methods converge to the same optimal policy.</li>
+            <li>DQN on CartPole and LunarLander, with experiments on learning rate, epsilon decay, target-network updates and network size. The LunarLander agent averaged about 210 reward over 100 episodes, above the 200 success threshold.</li>
+          </ul>
+          <div class="chips"><span>Python</span><span>PyTorch</span><span>Gymnasium</span><span>NumPy</span><span>A*</span><span>DQN</span></div>
+          <a class="card-link" href="https://github.com/akshatmaheshwar/comp3702-ai" target="_blank" rel="noopener">View source <span aria-hidden="true">↗</span></a>
+        </article>
+
         <div class="rail-pad" aria-hidden="true"></div>
       </div>
 
@@ -277,26 +276,31 @@
         <h2 id="exp-title" class="reveal">Where I've worked and studied</h2>
         <ol class="timeline">
           <li class="reveal">
+            <span class="org-logo wide"><img class="ol-l" src="assets/logos/da.png" alt="Data Annotation Tech logo" loading="lazy"><img class="ol-d" src="assets/logos/da-dark.png" alt="" loading="lazy"></span>
             <time>May 2026 to now</time>
             <h3>AI Trainer <span>DataAnnotation, freelance</span></h3>
             <p>Evaluate AI-generated answers on coding and reasoning tasks against detailed rubrics, write coding prompts that stress-test frontier models, and write test cases that expose edge-case failures in open-source Python codebases.</p>
           </li>
           <li class="reveal">
+            <span class="org-logo tall"><img class="ol-l" src="assets/logos/uq.png" alt="The University of Queensland logo" loading="lazy"><img class="ol-d" src="assets/logos/uq-dark.png" alt="" loading="lazy"></span>
             <time>2024 to 2025</time>
             <h3>Master of Information Technology <span>The University of Queensland</span></h3>
             <p>GPA 6 out of 7. Machine learning, artificial intelligence, cloud computing and advanced software engineering.</p>
           </li>
           <li class="reveal">
+            <span class="org-logo"><img class="ol-l" src="assets/logos/zoho.png" alt="Zoho logo" loading="lazy"><img class="ol-d" src="assets/logos/zoho-dark.png" alt="" loading="lazy"></span>
             <time>Oct 2023</time>
             <h3>Software Engineer trainee <span>Zoho Corporation, Site24x7</span></h3>
             <p>Learned Java, Cassandra and the Quartz scheduler quickly enough to deliver a working Hacker News clone with scheduled background jobs inside the programme. Received a full-time offer and declined it to study at UQ.</p>
           </li>
           <li class="reveal">
+            <span class="org-logo"><img class="ol-l" src="assets/logos/zoho.png" alt="Zoho logo" loading="lazy"><img class="ol-d" src="assets/logos/zoho-dark.png" alt="" loading="lazy"></span>
             <time>Jan to Apr 2023</time>
             <h3>Android Developer intern <span>Zoho Corporation, Zoho Books</span></h3>
             <p>Built an Android app in Kotlin, cut local query time by 10 to 15% by optimising SQLite queries, and raised a barcode scan success rate from about 90% to over 95% after tracing the root cause. Integrated Twilio SMS notifications and answered more than 50 developer support tickets.</p>
           </li>
           <li class="reveal">
+            <span class="org-logo portrait"><img src="assets/logos/ptu.png" alt="Puducherry Technological University logo" loading="lazy"></span>
             <time>2019 to 2023</time>
             <h3>B.Tech, Electronics and Communication <span>Puducherry Technological University</span></h3>
             <p>CGPA 8.58 out of 10.</p>
@@ -313,10 +317,10 @@
         <p class="sub reveal">I practise data structures and algorithms on LeetCode, and I take part in its timed weekly contests.</p>
         <div class="lc-grid">
           <div class="lc-tile reveal"><strong data-count="800" data-suffix="+">0</strong><span>problems solved</span></div>
-          <div class="lc-tile reveal" style="--d:60ms"><strong data-count="1668">0</strong><span>contest rating</span></div>
+          <div class="lc-tile reveal" style="--d:60ms"><strong data-count="1668">0</strong><span>contest rating</span><small class="lc-sub" id="lc-max" hidden></small></div>
           <div class="lc-tile reveal" style="--d:120ms"><strong data-count="30">0</strong><span>contests entered</span></div>
           <div class="lc-tile reveal" style="--d:180ms"><strong data-count="17" data-prefix="Top " data-suffix="%">0</strong><span>of rated users globally</span></div>
-          <div class="lc-tile reveal" id="lc-rank-tile" style="--d:240ms" hidden><strong data-count="0" data-prefix="#">0</strong><span>global rank on LeetCode</span></div>
+          <div class="lc-tile reveal" id="lc-rank-tile" style="--d:240ms" hidden><strong data-count="0" data-prefix="#">0</strong><span>LeetCode profile rank</span></div>
         </div>
         <p class="lc-best reveal" id="lc-best">Best finish: rank <b>809</b> out of more than 20,000 in Weekly Contest 372.</p>
         <p class="lc-updated" id="lc-updated" hidden></p>
