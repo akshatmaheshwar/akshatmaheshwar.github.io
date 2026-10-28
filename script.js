@@ -35,6 +35,24 @@
   /* ---------- Typed headline ---------- */
   var typed = $('#typed');
   var phrases = ['AI-enabled apps.', 'cloud-native systems.', 'full-stack products.', 'things that ship.'];
+  // Keep the whole typed line on one row: shrink its font size just enough for the longest phrase to fit.
+  var typedLine = typed.parentNode, heroH1 = typedLine.parentNode;
+  function fitTypedLine() {
+    typedLine.style.fontSize = '';
+    var probe = document.createElement('span');
+    probe.style.cssText = 'position:absolute;visibility:hidden;white-space:nowrap;left:-9999px;top:0;font:inherit;letter-spacing:inherit';
+    typedLine.appendChild(probe);
+    var widest = 0;
+    phrases.forEach(function (p) { probe.textContent = 'I build ' + p; widest = Math.max(widest, probe.getBoundingClientRect().width); });
+    typedLine.removeChild(probe);
+    var caretW = 14;
+    var avail = heroH1.clientWidth;
+    if (widest + caretW > avail) typedLine.style.fontSize = (Math.floor((avail / (widest + caretW)) * 1000) / 1000) + 'em';
+  }
+  typedLine.style.whiteSpace = 'nowrap';
+  fitTypedLine();
+  window.addEventListener('resize', fitTypedLine);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitTypedLine);
   if (reduce) {
     typed.textContent = phrases[0];
   } else {
