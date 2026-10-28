@@ -289,7 +289,7 @@ h2 { font-size: clamp(2rem, 5vw, 3.4rem); font-weight: 700; }
 @keyframes shake { 20% { transform: translateX(-10px); } 40% { transform: translateX(9px); } 60% { transform: translateX(-6px); } 80% { transform: translateX(4px); } }
 
 /* ---------- Added: System32 prank ---------- */
-.blackout { position: fixed; inset: 0; z-index: 400; background: #000; display: grid; place-items: center; cursor: none; animation: blackin 0.25s steps(1) both; }
+.blackout { position: fixed; inset: 0; z-index: 400; background: #000; display: grid; place-items: center; cursor: none; }
 .blackout.out { animation: blackout-fade 0.6s forwards; }
 @keyframes blackin { from { opacity: 0; } to { opacity: 1; } }
 @keyframes blackout-fade { to { opacity: 0; } }
