@@ -566,11 +566,14 @@
     toast('Disco mode. Productivity at an all-time high. 🪩', 4200);
     rainEmoji(['🪩', '🎶', '💃', '🕺'], 24);
     if (!reduce) {
-      document.body.classList.add('disco');
-      document.body.classList.add('shake');
-      setTimeout(function () { document.body.classList.remove('shake'); }, 600);
+      // On <html>, not <body>: a filter or transform on body pins position:fixed
+      // children (the falling emoji, the toast) to the page instead of the
+      // screen, so on a scrolled page they'd fall out of view. The root is exempt.
+      document.documentElement.classList.add('disco');
+      document.documentElement.classList.add('shake');
+      setTimeout(function () { document.documentElement.classList.remove('shake'); }, 600);
     }
-    setTimeout(function () { document.body.classList.remove('disco'); done && done(); }, 4200);
+    setTimeout(function () { document.documentElement.classList.remove('disco'); done && done(); }, 4200);
   }
   function rainEmoji(set, count) {
     if (reduce) return;

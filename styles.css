@@ -285,7 +285,9 @@ h2 { font-size: clamp(2rem, 5vw, 3.4rem); font-weight: 700; }
 @keyframes disco { to { filter: hue-rotate(360deg); } }
 .rain { position: fixed; top: -2rem; z-index: 190; font-size: 1.6rem; pointer-events: none; animation: fall linear forwards; }
 @keyframes fall { to { transform: translateY(110vh) rotate(540deg); } }
-.shake { animation: shake 0.5s; }
+/* Shake the page content only: a transform on <html> or <body> would knock
+   the fixed layers (emoji, toast, nav) off the screen for a moment. */
+.shake main, .shake footer { animation: shake 0.5s; }
 @keyframes shake { 20% { transform: translateX(-10px); } 40% { transform: translateX(9px); } 60% { transform: translateX(-6px); } 80% { transform: translateX(4px); } }
 
 /* ---------- Added: System32 prank ---------- */
