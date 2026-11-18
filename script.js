@@ -608,6 +608,23 @@
     if (e.pointerType === 'mouse' && stage() === 3 && dodges < 6 && !busy) dodge();
   });
 
+  // The footer spreads its items apart, so every new label width (each
+  // dodge changes the text) would nudge "Back to top". Reserve the widest
+  // label's width once the fonts are in, and keep the text to the right.
+  var wide = matchMedia('(min-width: 721px)'); // phones: the button has its own row
+  function reserveWidth() {
+    dnc.style.minWidth = '';
+    if (!wide.matches) return;
+    var keep = dnc.textContent, w = 0;
+    labels.concat(['Too slow', 'Nope', 'Missed me', 'Over here', 'Almost', 'Fine.', 'Fine. Click me.']).forEach(function (t) {
+      dnc.textContent = t; w = Math.max(w, dnc.offsetWidth);
+    });
+    dnc.textContent = keep;
+    dnc.style.minWidth = w + 1 + 'px';
+  }
+  (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(reserveWidth);
+  if (wide.addEventListener) wide.addEventListener('change', reserveWidth);
+
   function stage() { return clicks % 4; }
   function setLabel() { dnc.textContent = labels[Math.min(clicks, labels.length - 1)]; }
 
