@@ -78,9 +78,31 @@
 
         <!-- 1 -->
         <article class="card featured" data-tilt>
+          <div class="card-top"><span class="badge live">Featured · Live Chrome extension</span><span class="num">01</span></div>
+          <div class="title-row"><span class="org-logo sm"><img src="assets/logos/viewseen.png" width="128" height="128" alt="ViewSeen logo" loading="lazy"></span><h3>ViewSeen</h3></div>
+          <p class="blurb">A Chrome extension for sending what you find online to friends and talking about it right there. I built it end to end and published it on the Chrome Web Store, where anyone can install it.</p>
+          <ol class="flow" aria-label="How a share works">
+            <li>Right-click anything</li><li>Share card</li><li>Friend's chat</li><li>Opens at that exact spot</li>
+          </ol>
+          <ul class="points">
+            <li>Right-click a post, comment, video, image or selected text to share it with friends or any other app. Shared text opens on the other side scrolled to and highlighting those exact words, using URL text fragments.</li>
+            <li>Messages are end-to-end encrypted: each pair of users derives a shared key with ECDH P-256 and HKDF, and every message is sealed with AES-GCM and a fresh IV. Trade-off I chose on purpose: private keys live with the account so history works on every device, which means it protects against other users and data leaks, not against the project operator.</li>
+            <li>Real-time chat on Firestore with replies, reactions, GIFs, typing indicators, read receipts and unsend. Message paging keeps every loaded page live, so an unsend always shows up and a message being sent never jumps out of order.</li>
+            <li>Asks for no access to the websites you visit. It reads a page only when you choose to share from it, and an offscreen document watches for new messages to drive notifications and the toolbar badge.</li>
+            <li>Personal invite links send a friend request in one tap. Firestore security rules guard friendships and messages.</li>
+          </ul>
+          <div class="chips"><span>JavaScript</span><span>Chrome extension (MV3)</span><span>Firebase Auth</span><span>Firestore</span><span>Firebase Hosting</span><span>Web Crypto</span><span>esbuild</span></div>
+          <div class="card-links">
+            <a class="card-link strong" href="https://chrome.google.com/webstore/detail/ecmddokhfnmadbchcakbjcloehhilbgc" target="_blank" rel="noopener">Get it on the Chrome Web Store <span aria-hidden="true">↗</span></a>
+          </div>
+        </article>
+
+
+        <!-- 2 -->
+        <article class="card" data-tilt>
           <div class="card-top">
-            <span class="badge">Featured · Azure + AI</span>
-            <span class="num">01</span>
+            <span class="badge">Azure + AI</span>
+            <span class="num">02</span>
           </div>
           <h3>Document Q&amp;A on Azure</h3>
           <p class="blurb">A chat app that answers questions from a company's own documents, names the document it used, and says so when the answer isn't there.</p>
@@ -99,27 +121,6 @@
           </ul>
           <div class="chips"><span>Python</span><span>Quart</span><span>Azure AI Search</span><span>Azure OpenAI</span><span>Bicep</span><span>Container Apps</span><span>Managed identity</span></div>
           <a class="card-link" href="https://github.com/akshatmaheshwar/azure-openai-rag-chat" target="_blank" rel="noopener">View source <span aria-hidden="true">↗</span></a>
-        </article>
-
-        <!-- 2 -->
-        <article class="card" data-tilt>
-          <div class="card-top"><span class="badge live">Chrome extension · Live</span><span class="num">02</span></div>
-          <h3>ViewSeen</h3>
-          <p class="blurb">A Chrome extension for sending what you find online to friends and talking about it right there. I built it end to end and published it on the Chrome Web Store, where anyone can install it.</p>
-          <ol class="flow" aria-label="How a share works">
-            <li>Right-click anything</li><li>Share card</li><li>Friend's chat</li><li>Opens at that exact spot</li>
-          </ol>
-          <ul class="points">
-            <li>Right-click a post, comment, video, image or selected text to share it with friends or any other app. Shared text opens on the other side scrolled to and highlighting those exact words, using URL text fragments.</li>
-            <li>Messages are end-to-end encrypted: each pair of users derives a shared key with ECDH P-256 and HKDF, and every message is sealed with AES-GCM and a fresh IV. Trade-off I chose on purpose: private keys live with the account so history works on every device, which means it protects against other users and data leaks, not against the project operator.</li>
-            <li>Real-time chat on Firestore with replies, reactions, GIFs, typing indicators, read receipts and unsend. Message paging keeps every loaded page live, so an unsend always shows up and a message being sent never jumps out of order.</li>
-            <li>Asks for no access to the websites you visit. It reads a page only when you choose to share from it, and an offscreen document watches for new messages to drive notifications and the toolbar badge.</li>
-            <li>Personal invite links send a friend request in one tap. Firestore security rules guard friendships and messages.</li>
-          </ul>
-          <div class="chips"><span>JavaScript</span><span>Chrome extension (MV3)</span><span>Firebase Auth</span><span>Firestore</span><span>Firebase Hosting</span><span>Web Crypto</span><span>esbuild</span></div>
-          <div class="card-links">
-            <a class="card-link strong" href="https://chrome.google.com/webstore/detail/ecmddokhfnmadbchcakbjcloehhilbgc" target="_blank" rel="noopener">Get it on the Chrome Web Store <span aria-hidden="true">↗</span></a>
-          </div>
         </article>
 
         <!-- 3 -->
