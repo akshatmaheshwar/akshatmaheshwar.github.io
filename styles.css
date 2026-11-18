@@ -282,7 +282,11 @@ h2 { font-size: clamp(2rem, 5vw, 3.4rem); font-weight: 700; }
 @keyframes splat { 30% { transform: scale(1.8) rotate(20deg); } to { opacity: 0; transform: scale(0.2) rotate(120deg); } }
 .toast { position: fixed; left: 50%; bottom: 28px; z-index: 210; transform: translateX(-50%) translateY(20px); opacity: 0; max-width: calc(100% - 32px); padding: 12px 20px; border-radius: 999px; background: var(--fg); color: var(--bg); font-size: 0.9rem; text-align: center; transition: opacity 0.3s, transform 0.3s; pointer-events: none; }
 .toast.show { opacity: 1; transform: translateX(-50%); }
-.disco { animation: disco 0.9s linear infinite; }
+/* Disco recolours the page sections but not the falling emoji or the toast
+   (they're <body> children too). Not on <body> itself: a filter there pins
+   position:fixed children to the page instead of the screen. */
+html.disco body > :where(:not(.rain):not(.toast)) { animation: disco 0.9s linear infinite; }
+html.disco.shake main, html.disco.shake footer { animation: disco 0.9s linear infinite, shake 0.5s; }
 @keyframes disco { to { filter: hue-rotate(360deg); } }
 .rain { position: fixed; top: -2rem; z-index: 190; font-size: 1.6rem; pointer-events: none; animation: fall linear forwards; }
 @keyframes fall { to { transform: translateY(110vh) rotate(540deg); } }

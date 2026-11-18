@@ -576,9 +576,8 @@
     toast('Disco mode. Productivity at an all-time high. 🪩', 4200);
     rainEmoji(['🪩', '🎶', '💃', '🕺'], 24);
     if (!reduce) {
-      // On <html>, not <body>: a filter or transform on body pins position:fixed
-      // children (the falling emoji, the toast) to the page instead of the
-      // screen, so on a scrolled page they'd fall out of view. The root is exempt.
+      // Classes on <html>; the CSS applies the effect to the page sections
+      // only, so the falling emoji keep their colours and stay on screen.
       document.documentElement.classList.add('disco');
       document.documentElement.classList.add('shake');
       setTimeout(function () { document.documentElement.classList.remove('shake'); }, 600);
