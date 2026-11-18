@@ -58,10 +58,14 @@ h1, h2, h3 { font-family: var(--font-display); line-height: 1.1; letter-spacing:
 
 /* ---------- Background effects ---------- */
 .aurora { position: fixed; inset: 0; z-index: -2; overflow: hidden; background: radial-gradient(1200px 700px at 80% -10%, var(--bg-2), transparent), var(--bg); }
-.aurora span { position: absolute; width: 46vw; height: 46vw; min-width: 320px; min-height: 320px; border-radius: 50%; filter: blur(90px); opacity: 0.5; animation: drift 24s ease-in-out infinite alternate; }
-.aurora span:nth-child(1) { background: var(--accent); top: -12%; left: -8%; opacity: 0.32; }
-.aurora span:nth-child(2) { background: var(--accent-2); top: 30%; right: -14%; animation-duration: 30s; animation-delay: -8s; opacity: 0.28; }
-.aurora span:nth-child(3) { background: var(--accent-3); bottom: -20%; left: 22%; animation-duration: 36s; animation-delay: -14s; opacity: 0.2; }
+/* Soft blobs drawn as radial gradients, not blurred circles: a 90px blur on
+   three drifting half-screen layers had Safari redrawing the blur every
+   frame, starving everything else (animations stalled on iPhone). The box is
+   grown by the old blur radius on each side so the fade reaches as far. */
+.aurora span { background: radial-gradient(closest-side, var(--c), color-mix(in srgb, var(--c) 82%, transparent) 25%, color-mix(in srgb, var(--c) 50%, transparent) 50%, color-mix(in srgb, var(--c) 20%, transparent) 72%, color-mix(in srgb, var(--c) 5%, transparent) 88%, transparent); position: absolute; width: calc(46vw + 180px); height: calc(46vw + 180px); min-width: 500px; min-height: 500px; margin: -90px; border-radius: 50%; opacity: 0.5; animation: drift 24s ease-in-out infinite alternate; will-change: transform; }
+.aurora span:nth-child(1) { --c: var(--accent); top: -12%; left: -8%; opacity: 0.32; }
+.aurora span:nth-child(2) { --c: var(--accent-2); top: 30%; right: -14%; animation-duration: 30s; animation-delay: -8s; opacity: 0.28; }
+.aurora span:nth-child(3) { --c: var(--accent-3); bottom: -20%; left: 22%; animation-duration: 36s; animation-delay: -14s; opacity: 0.2; }
 :root[data-theme="light"] .aurora span { opacity: 0.22; }
 @keyframes drift { to { transform: translate3d(8vw, 6vh, 0) scale(1.15); } }
 
