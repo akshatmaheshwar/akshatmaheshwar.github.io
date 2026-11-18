@@ -339,7 +339,7 @@
     clearTimeout(toastTimer);
     toastTimer = setTimeout(function () { toastEl.classList.remove('show'); }, ms || 3200);
   }
-  var clicks = 0, dodges = 0, busy = false;
+  var clicks = 0, dodges = 0, busy = false, settling = null;
   var labels = ['Do not click', 'I said do not click', 'Seriously, stop', 'Last warning', 'Okay, you win'];
 
   // 1. "Delete the system" prank. What the visitor sees matches their operating system:
@@ -441,7 +441,7 @@
   function sysDemo(done) {
     var os = detectOS(), cfg = OS[os], mobile = (os === 'ios' || os === 'android');
     var wrap = document.createElement('div');
-    wrap.className = (mobile ? 'mob-wrap ' : 'term-wrap ') + 'pending';
+    wrap.className = mobile ? 'mob-wrap' : 'term-wrap';
     if (mobile) {
       wrap.innerHTML = mobileMarkup(os);
     } else {
@@ -450,7 +450,6 @@
         : '<div class="term-bar"><i></i><i></i><i></i><span>' + cfg.title + '</span></div>';
       wrap.innerHTML = '<div class="term ' + os + '" role="dialog" aria-label="Terminal">' + bar + '<div class="term-body" id="sys-body"></div></div>';
     }
-    document.body.appendChild(wrap);
     var alive = true, timers = [], black = null;
     function later(fn, ms) { var t = setTimeout(fn, ms); timers.push(t); }
     function finish() {
@@ -467,7 +466,10 @@
     wrap.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); });
 
     var START = reduce ? 0 : 1500, OPEN = reduce ? 0 : 450;
-    later(function () { wrap.classList.remove('pending'); }, START);
+    // Added to the page only when it should appear (not added early and kept
+    // transparent): some phone browsers never repainted it after it turned
+    // visible, so the warning flashed up only as the black screen took over.
+    later(function () { document.body.appendChild(wrap); }, START);
 
     function blackout() {
       if (!alive) return;
@@ -610,7 +612,9 @@
     dnc.style.transform = 'translate(' + x + 'px,' + y + 'px) rotate(' + ((Math.random() - 0.5) * 30) + 'deg)';
     dnc.textContent = ['Too slow', 'Nope', 'Missed me', 'Over here', 'Almost', 'Fine.'][dodges - 1];
     if (dodges >= 6) {
-      setTimeout(function () { dnc.style.transform = ''; dnc.textContent = 'Fine. Click me.'; toast('Okay okay, you earned it.', 2600); }, 700);
+      // Until it says "Fine. Click me." a tap doesn't count (on a phone every
+      // dodge is a tap, so a quick extra tap would skip straight to the end).
+      settling = setTimeout(function () { settling = null; dnc.style.transform = ''; dnc.textContent = 'Fine. Click me.'; toast('Okay okay, you earned it.', 2600); }, 700);
     }
   }
   dnc.addEventListener('pointerenter', function (e) {
@@ -638,7 +642,7 @@
   function setLabel() { dnc.textContent = labels[Math.min(clicks, labels.length - 1)]; }
 
   dnc.addEventListener('click', function () {
-    if (busy) return;
+    if (busy || settling) return;
     if (stage() === 3 && dodges < 6) { dodge(); return; }
     var s = stage();
     clicks++; busy = true;
