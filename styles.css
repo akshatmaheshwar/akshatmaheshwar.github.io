@@ -474,3 +474,12 @@ h2 { font-size: clamp(2rem, 5vw, 3.4rem); font-weight: 700; }
   .ios-erase { font: -apple-system-title3; font-weight: 400; }
   .ios-cancel { font: -apple-system-title3; font-weight: 600; }
 }
+
+/* ---------- Cursor ---------- */
+/* Arrow over ordinary text; the text cursor only where text is meant to be
+   selected or typed. Links and buttons keep their pointer. */
+html { cursor: default; }
+input, textarea, [contenteditable="true"], #email-text { cursor: text; }
+/* A card that isn't centred: click to bring it into view. */
+.rail .card:not(.active) { cursor: pointer; }
+.rail.dragging .card { cursor: grabbing; }

@@ -301,6 +301,16 @@
   });
   rail.addEventListener('click', function (e) { if (Math.abs(moved) > 5) { e.preventDefault(); moved = 0; } }, true);
 
+  // Click a card to bring it to the middle. Links and buttons inside it work
+  // as usual, and the end of a drag isn't a click (cancelled just above).
+  cards.forEach(function (c, i) {
+    c.addEventListener('click', function (e) {
+      if (e.defaultPrevented || e.target.closest('a, button')) return;
+      if (getSelection && String(getSelection()).length) return; // selecting text
+      if (i !== current()) go(i);
+    });
+  });
+
   // Vertical wheel stays vertical (page scroll); shift+wheel moves the rail natively.
   update();
   setTimeout(function () { go(0); update(); }, 50);
